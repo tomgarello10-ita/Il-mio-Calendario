@@ -1,0 +1,2020 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <meta name="theme-color" content="#0a0a0f"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-title" content="Il Mio Anno"/>
+  <title>Il Mio Anno ✦</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+  <style>
+    :root {
+      --bg: #08080f;
+      --bg2: #0f0f1a;
+      --bg3: #161625;
+      --bg4: #1e1e30;
+      --accent: #7c6fff;
+      --accent2: #ff6b9d;
+      --accent3: #6bffb8;
+      --text: #f0f0ff;
+      --text2: rgba(240,240,255,0.5);
+      --text3: rgba(240,240,255,0.25);
+      --border: rgba(124,111,255,0.12);
+      --border2: rgba(240,240,255,0.06);
+      --red: #ff4d6d;
+      --orange: #ff9f43;
+      --green: #26de81;
+      --blue: #45aaf2;
+      --purple: #a55eea;
+    }
+    body.light {
+      --bg: #f7f7ff;
+      --bg2: #eeeeff;
+      --bg3: #e4e4f8;
+      --bg4: #d8d8f0;
+      --text: #0a0a1a;
+      --text2: rgba(10,10,26,0.5);
+      --text3: rgba(10,10,26,0.25);
+      --border: rgba(124,111,255,0.15);
+      --border2: rgba(10,10,26,0.06);
+    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+    html,body{height:100%;overflow:hidden}
+    body{font-family:'Sora',sans-serif;overscroll-behavior:none;background:var(--bg);color:var(--text);transition:background 0.3s,color 0.3s}
+    ::-webkit-scrollbar{display:none}
+    input,textarea{-webkit-appearance:none;user-select:text;font-family:'Sora',sans-serif}
+    *{user-select:none}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+    @keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+    @keyframes glow{0%,100%{box-shadow:0 0 20px rgba(124,111,255,0.3)}50%{box-shadow:0 0 40px rgba(124,111,255,0.6)}}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+    @keyframes loadbar{0%{width:5%;margin-left:0}50%{width:60%;margin-left:20%}100%{width:5%;margin-left:95%}}
+    .tap:active{opacity:0.5;transform:scale(0.97)}
+    .spin{animation:spin 1s linear infinite}
+    .pulse{animation:pulse 1.5s ease infinite}
+    .glow{animation:glow 2s ease infinite}
+    .float{animation:float 3s ease infinite}
+    .fade-up{animation:fadeUp 0.3s ease forwards}
+
+    /* Glass cards */
+    .glass{background:var(--bg2);border:1px solid var(--border);backdrop-filter:blur(20px)}
+    .glass-strong{background:rgba(124,111,255,0.08);border:1px solid rgba(124,111,255,0.2)}
+
+    /* Scrollable */
+    .scroll{overflow-y:auto;-webkit-overflow-scrolling:touch}
+
+    /* Gradient text */
+    .grad{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+    /* Buttons */
+    .btn-primary{border:none;border-radius:14px;padding:14px 20px;font-family:'Sora',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.2s;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}
+    .btn-primary:active{transform:scale(0.97);opacity:0.9}
+    .btn-ghost{border:1px solid var(--border);border-radius:12px;padding:10px 16px;font-family:'Sora',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:all 0.2s;background:transparent;color:var(--text)}
+    .btn-ghost:active{transform:scale(0.97);background:var(--bg3)}
+
+    /* Tags */
+    .tag{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:0.03em}
+
+    /* Input styles */
+    .inp{width:100%;padding:12px 14px;border:1px solid var(--border2);border-radius:12px;font-size:15px;font-family:'Sora',sans-serif;color:var(--text);background:var(--bg3);outline:none;transition:border 0.2s}
+    .inp:focus{border-color:var(--accent)}
+    .inp::placeholder{color:var(--text3)}
+
+    /* AI typing animation */
+    @keyframes typing{0%,80%,100%{transform:scale(0)}40%{transform:scale(1)}}
+    .dot1{animation:typing 1.4s infinite 0s}
+    .dot2{animation:typing 1.4s infinite 0.2s}
+    .dot3{animation:typing 1.4s infinite 0.4s}
+
+    /* Notification badge */
+    .badge{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;background:var(--red);border-radius:9px;font-size:10px;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 4px;border:2px solid var(--bg)}
+
+    /* Progress bar */
+    .progress-bar{height:4px;border-radius:2px;background:var(--bg3);overflow:hidden}
+    .progress-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width 0.5s ease}
+
+    /* Category dots */
+    .cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+    /* Star decoration */
+    .star::before{content:'✦';color:var(--accent);margin-right:6px;opacity:0.7}
+  </style>
+</head>
+<body>
+<div id="root" style="height:100%"></div>
+<script type="text/babel">
+const {useState,useEffect,useRef,useCallback,useMemo} = React;
+
+// ── THEME ─────────────────────────────────────────────────────────────────────
+const ThemeCtx = React.createContext({dark:true,toggle:()=>{}});
+
+// ── CONSTANTS ────────────────────────────────────────────────────────────────
+const MONTHS=["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno","Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"];
+const MONTHS_S=["Gen","Feb","Mar","Apr","Mag","Giu","Lug","Ago","Set","Ott","Nov","Dic"];
+const DAYS=["L","M","M","G","V","S","D"];
+
+const CATS=[
+  {id:"verifica",    label:"Verifica",    emoji:"📝",color:"#ff4d6d",grad:"linear-gradient(135deg,#ff4d6d,#ff6b9d)"},
+  {id:"compleanno",  label:"Compleanno",  emoji:"🎂",color:"#ff9f43",grad:"linear-gradient(135deg,#ff9f43,#ffd32a)"},
+  {id:"commissione", label:"Commissione", emoji:"🛒",color:"#26de81",grad:"linear-gradient(135deg,#26de81,#20bf6b)"},
+  {id:"appuntamento",label:"Appuntamento",emoji:"🏥",color:"#45aaf2",grad:"linear-gradient(135deg,#45aaf2,#3867d6)"},
+  {id:"todo",        label:"Da fare",     emoji:"✅",color:"#a55eea",grad:"linear-gradient(135deg,#a55eea,#7c6fff)"},
+];
+const getCat=id=>CATS.find(c=>c.id===id)||CATS[4];
+
+const MATERIE=[
+  {id:"matematica",label:"Matematica",emoji:"📐"},
+  {id:"italiano",label:"Italiano",emoji:"📖"},
+  {id:"storia",label:"Storia",emoji:"🏛️"},
+  {id:"scienze",label:"Scienze",emoji:"🔬"},
+  {id:"inglese",label:"Inglese",emoji:"🇬🇧"},
+  {id:"fisica",label:"Fisica",emoji:"⚡"},
+  {id:"chimica",label:"Chimica",emoji:"🧪"},
+  {id:"geografia",label:"Geografia",emoji:"🌍"},
+  {id:"arte",label:"Arte",emoji:"🎨"},
+  {id:"musica",label:"Musica",emoji:"🎵"},
+  {id:"filosofia",label:"Filosofia",emoji:"🤔"},
+  {id:"informatica",label:"Informatica",emoji:"💻"},
+  {id:"ed_fisica",label:"Ed. Fisica",emoji:"⚽"},
+  {id:"latino",label:"Latino",emoji:"📜"},
+  {id:"altra",label:"Altra",emoji:"📚"},
+];
+const TIPI=["Scritto","Orale","Test","Compito","Presentazione"];
+
+const today=new Date();
+const todayStr=fmt(today.getFullYear(),today.getMonth(),today.getDate());
+function fmt(y,m,d){return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`}
+function daysIn(y,m){return new Date(y,m+1,0).getDate()}
+function firstDay(y,m){const d=new Date(y,m,1).getDay();return d===0?6:d-1}
+function addMonths(y,m,delta){let nm=m+delta,ny=y;while(nm>11){nm-=12;ny++;}while(nm<0){nm+=12;ny--;}return{year:ny,month:nm};}
+function daysBetween(s){const[y,m,d]=s.split("-").map(Number);return Math.round((new Date(y,m-1,d)-new Date(today.getFullYear(),today.getMonth(),today.getDate()))/(864e5))}
+
+const SK="ilmioanno_v7";
+function loadEv(){try{return JSON.parse(localStorage.getItem(SK))||{}}catch{return{}}}
+function saveEv(e){try{localStorage.setItem(SK,JSON.stringify(e))}catch{}}
+function loadPref(){try{return JSON.parse(localStorage.getItem(SK+"_pref"))||{dark:true}}catch{return{dark:true}}}
+function savePref(p){try{localStorage.setItem(SK+"_pref",JSON.stringify(p))}catch{}}
+
+// ── CLAUDE API ───────────────────────────────────────────────────────────────
+const CLAUDE_KEY = "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";
+
+// Chiamata semplice, diretta, senza streaming — funziona ovunque incluso GitHub Pages
+async function callClaude(prompt, maxTokens=2000, _onChunk=null){
+  // Timeout generoso ma non infinito
+  const controller = new AbortController();
+  const timeout = setTimeout(()=>controller.abort(), 55000);
+
+  let lastErr;
+  for(let attempt=1; attempt<=3; attempt++){
+    try{
+      const res = await fetch("https://api.anthropic.com/v1/messages",{
+        method:"POST",
+        signal: controller.signal,
+        headers:{
+          "Content-Type":"application/json",
+          "x-api-key": CLAUDE_KEY,
+          "anthropic-version":"2023-06-01",
+          "anthropic-dangerous-direct-browser-access":"true"
+        },
+        body:JSON.stringify({
+          model:"claude-haiku-4-5-20251001",
+          max_tokens: maxTokens,
+          stream: false,
+          messages:[{role:"user", content: prompt}]
+        })
+      });
+
+      clearTimeout(timeout);
+
+      if(!res.ok){
+        const err = await res.json().catch(()=>({}));
+        const msg = err.error?.message || `HTTP ${res.status}`;
+        // 529 = overloaded, ritenta
+        if(res.status===529 && attempt<3){ await sleep(2000*attempt); continue; }
+        throw new Error(msg);
+      }
+
+      const d = await res.json();
+      if(d.error) throw new Error(d.error.message);
+      const text = d.content?.[0]?.text || "";
+      // Se onChunk era passato, simula l'aggiornamento con il testo completo
+      if(_onChunk) _onChunk(text);
+      return text;
+
+    }catch(e){
+      clearTimeout(timeout);
+      lastErr = e;
+      if(e.name==="AbortError") throw new Error("Timeout: la risposta ha impiegato troppo. Riprova.");
+      if(attempt<3 && !e.message.includes("401") && !e.message.includes("403")){
+        await sleep(1500*attempt);
+        continue;
+      }
+      throw e;
+    }
+  }
+  throw lastErr;
+}
+
+function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+// ── ALERTS ───────────────────────────────────────────────────────────────────
+function getAlerts(ev){
+  const a=[];
+  Object.entries(ev).forEach(([day,evs])=>evs.forEach(e=>{
+    const d=daysBetween(day),c=getCat(e.category);
+    if(e.category==="verifica"){
+      if(d===7)a.push({e,day,d,msg:"Inizia a studiare! Manca 1 settimana",u:"low",icon:"📖"});
+      else if(d===3)a.push({e,day,d,msg:"3 giorni! Intensifica il ripasso",u:"medium",icon:"⚡"});
+      else if(d===1)a.push({e,day,d,msg:"DOMANI! Rivedi tutto stasera",u:"urgent",icon:"🚨"});
+      else if(d===0)a.push({e,day,d,msg:"OGGI! In bocca al lupo! 🍀",u:"urgent",icon:"🎯"});
+    } else if(e.category==="compleanno"){
+      if(d===3)a.push({e,day,d,msg:"Tra 3 giorni — pensa a un regalo",u:"medium",icon:"🎁"});
+      else if(d===1)a.push({e,day,d,msg:"DOMANI! Non dimenticare! 🎉",u:"high",icon:"🎂"});
+      else if(d===0)a.push({e,day,d,msg:"OGGI è il compleanno! 🥳",u:"urgent",icon:"🎂"});
+    } else {
+      if(d===1)a.push({e,day,d,msg:"DOMANI! Non dimenticare",u:"high",icon:"⏰"});
+      else if(d===0)a.push({e,day,d,msg:"OGGI!",u:"urgent",icon:"🔔"});
+    }
+  }));
+  const o={urgent:0,high:1,medium:2,low:3};
+  return a.sort((a,b)=>o[a.u]-o[b.u]);
+}
+
+// ── METEO ─────────────────────────────────────────────────────────────────────
+function useMeteo(){
+  const [meteo,setMeteo]=useState(null);
+  useEffect(()=>{
+    if(!navigator.geolocation) return;
+    navigator.geolocation.getCurrentPosition(async pos=>{
+      try{
+        const {latitude:lat,longitude:lon}=pos.coords;
+        const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&timezone=auto`);
+        const d=await r.json();
+        const temp=Math.round(d.current.temperature_2m);
+        const code=d.current.weather_code;
+        const icon=code<=1?"☀️":code<=3?"⛅":code<=48?"🌫️":code<=67?"🌧️":"⛈️";
+        setMeteo({temp,icon});
+      }catch{}
+    },()=>{},{timeout:5000});
+  },[]);
+  return meteo;
+}
+
+// ── PDF GENERATOR ─────────────────────────────────────────────────────────────
+function generateStudyPDF(materiaId, argomento, tipo, aiContent) {
+  const mat = MATERIE.find(m=>m.id===materiaId);
+  const matLabel = mat?.label || argomento || "Studio";
+  const oggi = new Date().toLocaleDateString('it-IT',{day:'numeric',month:'long',year:'numeric'});
+
+  const gradColors = {
+    matematica:["#667eea","#764ba2"],
+    italiano:["#f093fb","#f5576c"],
+    storia:["#4facfe","#00f2fe"],
+    scienze:["#43e97b","#38f9d7"],
+    inglese:["#fa709a","#fee140"],
+    fisica:["#a18cd1","#fbc2eb"],
+    chimica:["#ffecd2","#fcb69f"],
+    geografia:["#a1c4fd","#c2e9fb"],
+    filosofia:["#d4fc79","#96e6a1"],
+    latino:["#fdfbfb","#ebedee"],
+    informatica:["#2980B9","#6DD5FA"],
+    arte:["#ee9ca7","#ffdde1"],
+    musica:["#4568DC","#B06AB3"],
+    ed_fisica:["#11998e","#38ef7d"],
+    altra:["#7c6fff","#ff6b9d"]
+  };
+  const [c1,c2] = gradColors[materiaId] || gradColors.altra;
+
+  // Parse AI content into sections
+  const sections = parseAIContent(aiContent);
+
+  const sectionsHTML = sections.map((s, i) => `
+    <div class="section" style="animation-delay:${i*0.1}s">
+      <div class="section-title">
+        <span class="section-num">${i+1}</span>
+        ${s.title}
+      </div>
+      <div class="section-body">${s.content}</div>
+    </div>
+  `).join('');
+
+  return `<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${matLabel} — Scheda di Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Sora',sans-serif;background:#f8f8ff;color:#1a1a2e;min-height:100vh}
+.hero{background:linear-gradient(135deg,${c1},${c2});color:#fff;padding:60px 50px 50px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50%;right:-10%;width:300px;height:300px;background:rgba(255,255,255,0.08);border-radius:50%}
+.hero::after{content:'';position:absolute;bottom:-30%;left:-5%;width:200px;height:200px;background:rgba(255,255,255,0.05);border-radius:50%}
+.hero-emoji{font-size:56px;margin-bottom:16px;display:block;position:relative;z-index:1}
+.hero-title{font-size:32px;font-weight:800;line-height:1.1;margin-bottom:8px;position:relative;z-index:1;letter-spacing:-0.5px}
+.hero-sub{font-size:16px;opacity:0.85;position:relative;z-index:1;font-weight:400}
+.hero-meta{display:flex;gap:16px;margin-top:20px;position:relative;z-index:1;flex-wrap:wrap}
+.meta-pill{background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:600;backdrop-filter:blur(4px)}
+.body{max-width:800px;margin:0 auto;padding:40px 50px 60px}
+.section{background:#fff;border-radius:16px;padding:24px 28px;margin-bottom:20px;box-shadow:0 2px 20px rgba(0,0,0,0.06);border-left:4px solid ${c1}}
+.section-title{display:flex;align-items:center;gap:12px;font-size:17px;font-weight:700;color:#1a1a2e;margin-bottom:16px}
+.section-num{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,${c1},${c2});color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.section-body{font-size:14px;line-height:1.85;color:#2a2a3e;white-space:pre-wrap}
+.section-body strong,.section-body b{color:${c1};font-weight:700}
+.section-body em,.section-body i{color:#7c6fff;font-style:normal;font-weight:600}
+.key-box{background:linear-gradient(135deg,${c1}12,${c2}08);border:1px solid ${c1}30;border-radius:12px;padding:16px 20px;margin:12px 0}
+.definition{background:#f8f8ff;border-left:3px solid ${c1};border-radius:0 8px 8px 0;padding:10px 16px;margin:8px 0;font-size:13.5px}
+.formula{font-family:'JetBrains Mono',monospace;background:#1a1a2e;color:#a8ff78;border-radius:10px;padding:12px 18px;margin:10px 0;font-size:13px;overflow-x:auto}
+.date-item{display:flex;align-items:flex-start;gap:12px;padding:8px 0;border-bottom:1px solid #f0f0ff}
+.date-badge{background:${c1};color:#fff;border-radius:8px;padding:3px 10px;font-size:12px;font-weight:700;white-space:nowrap;flex-shrink:0}
+ul,ol{padding-left:20px;margin:8px 0}
+li{font-size:14px;line-height:1.7;margin:4px 0;color:#2a2a3e}
+li::marker{color:${c1}}
+h3{font-size:14px;font-weight:700;color:${c1};margin:14px 0 6px;text-transform:uppercase;letter-spacing:0.05em}
+.print-btn{position:fixed;bottom:24px;right:24px;background:linear-gradient(135deg,${c1},${c2});color:#fff;border:none;border-radius:50px;padding:14px 24px;font-size:14px;font-weight:700;font-family:'Sora',sans-serif;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.2);display:flex;align-items:center;gap:8px}
+.footer{text-align:center;padding:20px;font-size:11px;color:#999;border-top:1px solid #f0f0ff;margin-top:40px}
+@media print{.print-btn{display:none}.hero{-webkit-print-color-adjust:exact;print-color-adjust:exact}.formula{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<button class="print-btn" onclick="window.print()">📄 Salva come PDF</button>
+<div class="hero">
+  <span class="hero-emoji">${mat?.emoji || "📚"}</span>
+  <div class="hero-title">${argomento || matLabel}</div>
+  <div class="hero-sub">Scheda di Studio — ${matLabel}</div>
+  <div class="hero-meta">
+    <span class="meta-pill">📅 ${oggi}</span>
+    ${tipo?`<span class="meta-pill">📝 ${tipo}</span>`:""}
+    <span class="meta-pill">✨ Generato con Claude AI</span>
+  </div>
+</div>
+<div class="body">
+  ${sectionsHTML}
+  <div class="footer">Scheda generata da Il Mio Anno • Claude AI • Buono studio! 💪</div>
+</div>
+</body>
+</html>`;
+}
+
+function parseAIContent(text) {
+  if(!text) return [{title:"Contenuto", content:"Contenuto non disponibile."}];
+  const sections = [];
+  const lines = text.split('\n');
+  let current = null;
+
+  for(const line of lines) {
+    const trimmed = line.trim();
+    if(trimmed.startsWith('## ') || trimmed.startsWith('### ') || trimmed.startsWith('# ')) {
+      if(current) sections.push(current);
+      current = {title: trimmed.replace(/^#+\s+/,''), content:''};
+    } else if(!current) {
+      current = {title:'Introduzione', content: trimmed + '\n'};
+    } else {
+      current.content += line + '\n';
+    }
+  }
+  if(current) sections.push(current);
+  if(sections.length === 0) sections.push({title:'Contenuto', content: text});
+
+  return sections.map(s => ({
+    ...s,
+    content: s.content
+      .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g,'<em>$1</em>')
+      .replace(/`(.*?)`/g,`<span style="font-family:'JetBrains Mono',monospace;background:#1a1a2e;color:#a8ff78;padding:2px 6px;border-radius:4px;font-size:13px">$1</span>`)
+      .trim()
+  }));
+}
+
+// ── SWIPE CALENDAR ────────────────────────────────────────────────────────────
+function SwipeCalendar({year,month,events,alerts,onDay,onMonthChange}){
+  const containerRef=useRef(null);
+  const startX=useRef(null);
+  const startY=useRef(null);
+  const currentX=useRef(0);
+  const isDragging=useRef(false);
+  const hasMoved=useRef(false);
+  const [offset,setOffset]=useState(0);
+  const [animating,setAnimating]=useState(false);
+  const W=useRef(375);
+  useEffect(()=>{if(containerRef.current)W.current=containerRef.current.offsetWidth;},[]);
+  const onTS=e=>{if(animating)return;startX.current=e.touches[0].clientX;startY.current=e.touches[0].clientY;isDragging.current=false;hasMoved.current=false;};
+  const onTM=e=>{if(startX.current===null)return;const dx=e.touches[0].clientX-startX.current,dy=Math.abs(e.touches[0].clientY-startY.current);if(!isDragging.current){if(dy>Math.abs(dx)||Math.abs(dx)<8)return;isDragging.current=true;}e.preventDefault();hasMoved.current=Math.abs(dx)>12;currentX.current=dx;setOffset(dx);};
+  const onTE=()=>{if(!isDragging.current){startX.current=null;return;}const dx=currentX.current,thr=W.current*0.28;setAnimating(true);if(dx<-thr){setOffset(-W.current);setTimeout(()=>{const n=addMonths(year,month,1);onMonthChange(n.year,n.month);setOffset(0);setAnimating(false);},280);}else if(dx>thr){setOffset(W.current);setTimeout(()=>{const n=addMonths(year,month,-1);onMonthChange(n.year,n.month);setOffset(0);setAnimating(false);},280);}else{setOffset(0);setTimeout(()=>setAnimating(false),280);}startX.current=null;isDragging.current=false;currentX.current=0;};
+  const handleDayClick=useCallback((key)=>{if(!hasMoved.current&&!animating)onDay(key);},[animating,onDay]);
+  const prev=addMonths(year,month,-1);
+  const next=addMonths(year,month,1);
+  return (
+    <div ref={containerRef} style={{overflow:"hidden",touchAction:"pan-y"}} onTouchStart={onTS} onTouchMove={onTM} onTouchEnd={onTE}>
+      <div style={{display:"flex",width:"300%",transform:`translateX(calc(-33.333% + ${offset}px))`,transition:animating?"transform 0.28s cubic-bezier(0.25,0.46,0.45,0.94)":"none",willChange:"transform"}}>
+        <div style={{width:"33.333%",flexShrink:0}}><MonthGrid year={prev.year} month={prev.month} events={events} alerts={alerts} onDay={handleDayClick}/></div>
+        <div style={{width:"33.333%",flexShrink:0}}><MonthGrid year={year} month={month} events={events} alerts={alerts} onDay={handleDayClick}/></div>
+        <div style={{width:"33.333%",flexShrink:0}}><MonthGrid year={next.year} month={next.month} events={events} alerts={alerts} onDay={handleDayClick}/></div>
+      </div>
+    </div>
+  );
+}
+
+function MonthGrid({year,month,events,alerts,onDay}){
+  const {dark}=React.useContext(ThemeCtx);
+  const fd=firstDay(year,month),td=daysIn(year,month);
+  const getDay=k=>events[k]||[];
+  return (
+    <div style={{padding:"0 4px"}}>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",marginBottom:"6px"}}>
+        {DAYS.map((d,i)=><div key={i} style={{textAlign:"center",fontSize:"10px",fontWeight:"700",color:i>=5?"var(--orange)":"var(--text3)",padding:"4px 0",letterSpacing:"0.05em"}}>{d}</div>)}
+      </div>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",rowGap:"2px"}}>
+        {Array.from({length:fd},(_,i)=><div key={`e${i}`}/>)}
+        {Array.from({length:td},(_,i)=>{
+          const day=i+1,key=fmt(year,month,day);
+          const evs=getDay(key),isT=key===todayStr,isW=(fd+i)%7>=5;
+          const isPast=key<todayStr;
+          const cats=[...new Set(evs.map(e=>e.category))].slice(0,3);
+          const hasAl=alerts.some(a=>a.day===key);
+          const diff=daysBetween(key);
+          return (
+            <div key={key} onClick={()=>onDay(key)} style={{aspectRatio:"1",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",cursor:"pointer",position:"relative",borderRadius:"10px",WebkitTapHighlightColor:"transparent",transition:"background 0.15s",background:evs.length>0&&!isT?"rgba(124,111,255,0.06)":"transparent"}}>
+              {isT&&<div style={{position:"absolute",inset:"8%",borderRadius:"8px",background:"linear-gradient(135deg,#7c6fff,#ff6b9d)"}}/>}
+              {hasAl&&!isT&&<div style={{position:"absolute",inset:"8%",borderRadius:"8px",border:"1.5px solid var(--red)"}}/>}
+              <div style={{fontSize:"14px",fontWeight:isT?"700":"500",color:isT?"#fff":isPast?"var(--text3)":isW?"var(--orange)":"var(--text)",position:"relative",zIndex:1,lineHeight:1,marginBottom:cats.length?"3px":"0",fontFamily:isT?"'Sora',sans-serif":"inherit"}}>{day}</div>
+              {cats.length>0&&<div style={{display:"flex",gap:"2px",position:"relative",zIndex:1}}>{cats.map(cid=><div key={cid} style={{width:"4px",height:"4px",borderRadius:"50%",background:isT?"rgba(255,255,255,0.8)":getCat(cid).color}}/>)}</div>}
+              {!isT&&diff>0&&diff<=5&&evs.some(e=>e.category==="verifica")&&(
+                <div style={{position:"absolute",top:"-1px",right:"-1px",background:"var(--red)",borderRadius:"5px",padding:"1px 3px",fontSize:"8px",fontWeight:"700",color:"#fff",zIndex:2,lineHeight:1}}>{diff}g</div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ── AI RIPASSO PANEL ──────────────────────────────────────────────────────────
+function RipassoPanel({event, onClose}){
+  const [step,setStep]=useState("menu");
+  const [aiText,setAiText]=useState("");
+  const [loadMsg,setLoadMsg]=useState("");
+  const [quizDomande,setQuizDomande]=useState([]);
+  const [quizIndice,setQuizIndice]=useState(0);  // una domanda alla volta
+  const [livello,setLivello]=useState(3);
+  const [vis,setVis]=useState(false);
+  const [err,setErr]=useState("");
+  const [flashcards,setFlashcards]=useState([]);
+  const [fcIndice,setFcIndice]=useState(0);
+  const [fcFlipped,setFcFlipped]=useState(false);
+  const [checklist,setChecklist]=useState([]);
+  const [scheda,setScheda]=useState(null); // parsed sections
+
+  useEffect(()=>{requestAnimationFrame(()=>setVis(true))},[]);
+  const close=()=>{setVis(false);setTimeout(onClose,320)};
+
+  const mat=MATERIE.find(m=>m.id===event.materia)||MATERIE[MATERIE.length-1];
+  const matLabel=event.materia==="altra"?(event.customMateria||"Materia"):mat.label;
+  const arg=event.argomento||matLabel;
+  const tipo=event.tipoVerifica||"Verifica";
+  const d=event.day?daysBetween(event.day):null;
+
+  // ── Genera scheda studio ──
+  const generaScheda=async()=>{
+    setStep("loading-scheda");
+    setAiText(""); setErr("");
+    const msgs=["📚 Analizzo l'argomento…","✍️ Scrivo le definizioni…","📐 Preparo formule e regole…","💡 Organizzo i concetti…","✅ Creo la checklist…","🎯 Aggiungo i trucchi…"];
+    let mi=0; setLoadMsg(msgs[0]);
+    const ticker=setInterval(()=>{mi=(mi+1)%msgs.length;setLoadMsg(msgs[mi]);},2000);
+    try{
+      const urgenza=d===0?"OGGI è la verifica!":d===1?"La verifica è DOMANI!":d&&d<=3?`Mancano solo ${d} giorni!`:d&&d<=7?`Mancano ${d} giorni.`:"";
+      const prompt=`Sei un professore italiano esperto di ${matLabel}. ${urgenza} Prepara una scheda di studio COMPLETA per una ${tipo} su: "${arg}".
+
+Usa ESATTAMENTE queste sezioni con ## per i titoli:
+
+## 📌 Definizioni Chiave
+Per ogni termine scrivi una riga: **Termine**: definizione chiara. Almeno 6 termini.
+
+## 📐 Regole e Formule
+Regole importanti, formule, leggi. Con esempi pratici per ognuna.
+
+## 📅 Date e Numeri da Ricordare
+Date storiche, numeri, statistiche, dati quantitativi rilevanti per l'argomento.
+
+## 💡 Concetti Fondamentali
+I 4-5 concetti chiave spiegati chiaramente con esempi dalla vita reale.
+
+## ⚠️ Errori Comuni
+I 5 errori tipici e come evitarli. Formato: "❌ Errore: … → ✅ Corretto: …"
+
+## ✅ Checklist Pre-${tipo}
+10 punti concreti tipo "So spiegare…", "So calcolare…", "Conosco…" da spuntare mentalmente.
+
+## 🎯 Trucchi per Ricordare
+Acronimi, mnemotecniche, associazioni creative. Almeno 3 trucchi pratici.
+
+Scrivi in italiano. Dettagliato, pratico, con esempi reali. Almeno 500 parole.`;
+
+      const text=await callClaude(prompt, 2500);
+      clearInterval(ticker);
+      setAiText(text);
+
+      // Estrai checklist dal testo
+      const checkMatch=text.match(/## ✅ Checklist[^\n]*\n([\s\S]*?)(?=\n## |$)/);
+      if(checkMatch){
+        const items=checkMatch[1].split('\n').filter(l=>l.trim().match(/^[-•*]|^\d+\./)).map(l=>l.replace(/^[-•*\d.]\s*/,'').trim()).filter(Boolean);
+        setChecklist(items.map(t=>({text:t,done:false})));
+      }
+
+      // Flashcard da definizioni
+      const defMatch=text.match(/## 📌 Definizioni[^\n]*\n([\s\S]*?)(?=\n## |$)/);
+      if(defMatch){
+        const cards=defMatch[1].split('\n').filter(l=>l.includes('**')).map(l=>{
+          const m=l.match(/\*\*([^*]+)\*\*[:\s]+(.*)/);
+          return m?{front:m[1].trim(),back:m[2].trim()}:null;
+        }).filter(Boolean);
+        setFlashcards(cards);
+      }
+
+      setStep("scheda");
+    }catch(e){
+      clearInterval(ticker);
+      setErr("❌ "+e.message+". Controlla la connessione e riprova.");
+      setStep("menu");
+    }
+  };
+
+  // ── Apri PDF ──
+  const apriPDF=()=>{
+    const html=generateStudyPDF(event.materia, arg, tipo, aiText);
+    const blob=new Blob([html],{type:"text/html"});
+    window.open(URL.createObjectURL(blob),"_blank");
+  };
+
+  // ── Genera Quiz (una domanda alla volta) ──
+  const generaQuiz=async()=>{
+    setStep("loading-quiz");
+    setErr(""); setQuizIndice(0);
+    const msgs=["🎯 Preparo le domande…","🧠 Scelgo gli argomenti…","✍️ Scrivo le opzioni…","🔀 Quasi pronto…"];
+    let mi=0; setLoadMsg(msgs[0]);
+    const ticker=setInterval(()=>{mi=(mi+1)%msgs.length;setLoadMsg(msgs[mi]);},1800);
+    try{
+      const diff=["facilissime","semplici","medie","difficili","da esame"][livello-1];
+      // Prompt il più semplice possibile — meno testo = meno errori JSON
+      const prompt=`Professore italiano di ${matLabel}. Quiz ${diff} su "${arg}". 6 domande.
+Rispondi SOLO con questo JSON (nessun testo aggiuntivo, nessun backtick):
+[{"d":"domanda","r":["A","B","C","D"],"c":"A","e":"spiegazione breve"}]
+Regola fondamentale: "c" deve essere UGUALE IDENTICA a uno dei valori in "r".`;
+
+      const raw = await callClaude(prompt, 1200);
+      clearInterval(ticker);
+
+      // Parser ultra-robusto: prova vari metodi
+      const domande = parseQuizJSON(raw);
+      if(!domande || domande.length < 2) throw new Error("Risposta non valida. Riprova.");
+
+      setQuizDomande(domande.map(q=>({
+        domanda: q.d,
+        risposte: [...q.r].sort(()=>Math.random()-0.5),
+        corretta: q.c,
+        spiegazione: q.e||q.spieg||"",
+        scelta: null
+      })));
+      setStep("quiz");
+    }catch(e){
+      clearInterval(ticker);
+      setErr("❌ "+e.message+" — Riprova, a volte basta un secondo tentativo.");
+      setStep("quiz-setup");
+    }
+  };
+
+  // Parser JSON che gestisce qualsiasi formato Claude restituisce
+  function parseQuizJSON(raw){
+    // 1. Pulizia aggressiva
+    let s = raw
+      .replace(/```json\s*/gi,"").replace(/```\s*/g,"")  // rimuovi backtick
+      .replace(/^\s*[\w\s,]*?(\[)/,"$1")                 // rimuovi testo prima di [
+      .trim();
+
+    // 2. Estrai solo la parte JSON tra [ e ]
+    const start = s.indexOf('[');
+    const end = s.lastIndexOf(']');
+    if(start >= 0 && end > start) s = s.slice(start, end+1);
+
+    // 3. Prova parse diretto
+    try{ return JSON.parse(s); }catch{}
+
+    // 4. Fix errori comuni: virgole mancanti, virgolette, trailing commas
+    try{
+      const fixed = s
+        .replace(/,\s*]/g,"]")           // trailing comma array
+        .replace(/,\s*}/g,"}")           // trailing comma oggetto
+        .replace(/([{,]\s*)(\w+):/g,'$1"$2":')  // chiavi senza virgolette
+        .replace(/:\s*'([^']*)'/g,':"$1"');      // single quotes → double
+      return JSON.parse(fixed);
+    }catch{}
+
+    // 5. Estrai oggetti uno per uno con regex
+    try{
+      const objs=[];
+      const re=/\{[^{}]*"d"\s*:\s*"[^"]+[^{}]*\}/g;
+      let m;
+      while((m=re.exec(s))!==null){
+        try{ objs.push(JSON.parse(m[0])); }catch{}
+      }
+      if(objs.length>=2) return objs;
+    }catch{}
+
+    return null;
+  }
+
+  const rispondi=(r)=>setQuizDomande(prev=>prev.map((d,j)=>j===quizIndice?{...d,scelta:r}:d));
+  const punteggio=quizDomande.filter(d=>d.scelta===d.corretta).length;
+  const tutteRisposte=quizDomande.length>0&&quizDomande.every(d=>d.scelta!==null);
+  const dCorr=quizIndice<quizDomande.length?quizDomande[quizIndice]:null;
+
+  return (
+    <div onClick={e=>e.target===e.currentTarget&&close()} style={{position:"fixed",inset:0,zIndex:600,background:vis?"rgba(0,0,0,0.75)":"rgba(0,0,0,0)",backdropFilter:"blur(14px)",transition:"background 0.3s",display:"flex",flexDirection:"column",justifyContent:"flex-end"}}>
+      <div style={{background:"var(--bg2)",borderRadius:"24px 24px 0 0",maxHeight:"93vh",display:"flex",flexDirection:"column",transform:vis?"translateY(0)":"translateY(100%)",transition:"transform 0.4s cubic-bezier(0.32,0.72,0,1)",paddingBottom:"env(safe-area-inset-bottom,24px)"}}>
+
+        {/* Handle */}
+        <div style={{display:"flex",justifyContent:"center",padding:"10px 0 0"}}><div style={{width:"40px",height:"4px",background:"var(--border)",borderRadius:"2px"}}/></div>
+
+        {/* Header */}
+        <div style={{padding:"14px 18px 10px",display:"flex",alignItems:"center",justifyContent:"space-between",flexShrink:0,borderBottom:"1px solid var(--border2)"}}>
+          <div style={{flex:1,minWidth:0}}>
+            <div style={{display:"flex",alignItems:"center",gap:"8px",marginBottom:"3px"}}>
+              <div style={{fontSize:"10px",fontWeight:"800",letterSpacing:"0.08em",color:"var(--accent)"}}>🧠 RIPASSO AI</div>
+              {d!==null&&d>=0&&d<=7&&<div style={{fontSize:"10px",fontWeight:"800",background:d<=1?"var(--red)":d<=3?"var(--orange)":"rgba(124,111,255,0.2)",color:d<=3?"#fff":"var(--accent)",padding:"2px 8px",borderRadius:"8px"}}>{d===0?"OGGI!":d===1?"DOMANI!":"-"+d+"gg"}</div>}
+            </div>
+            <div style={{fontSize:"17px",fontWeight:"700",color:"var(--text)",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{arg}</div>
+            <div style={{fontSize:"11px",color:"var(--text2)",marginTop:"1px"}}>{tipo} · {matLabel}</div>
+          </div>
+          <button onClick={close} style={{background:"var(--bg3)",border:"none",borderRadius:"50%",width:"32px",height:"32px",cursor:"pointer",color:"var(--text2)",fontSize:"18px",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,marginLeft:"10px"}}>×</button>
+        </div>
+
+        <div className="scroll" style={{flex:1,padding:"0 14px 14px",overscrollBehavior:"contain"}}>
+
+          {/* ─── MENU ─── */}
+          {step==="menu"&&(
+            <div className="fade-up" style={{paddingTop:"14px"}}>
+              {err&&<div style={{background:"rgba(255,77,109,0.08)",border:"1px solid rgba(255,77,109,0.25)",borderRadius:"12px",padding:"12px 14px",marginBottom:"12px",fontSize:"13px",color:"var(--red)",lineHeight:1.4}}>{err}</div>}
+
+              {/* Card Scheda */}
+              <div onClick={generaScheda} className="tap" style={{background:"linear-gradient(135deg,rgba(124,111,255,0.12),rgba(255,107,157,0.08))",border:"1px solid rgba(124,111,255,0.2)",borderRadius:"18px",padding:"18px",marginBottom:"10px",cursor:"pointer"}}>
+                <div style={{display:"flex",gap:"14px",alignItems:"center"}}>
+                  <div style={{width:"52px",height:"52px",borderRadius:"16px",background:"linear-gradient(135deg,#7c6fff,#ff6b9d)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"26px",flexShrink:0}}>📄</div>
+                  <div style={{flex:1}}>
+                    <div style={{fontSize:"16px",fontWeight:"700",color:"var(--text)",marginBottom:"3px"}}>Scheda di Studio</div>
+                    <div style={{fontSize:"12px",color:"var(--text2)",lineHeight:1.45}}>Definizioni · Formule · Date · Checklist · Flashcard · PDF</div>
+                  </div>
+                  <span style={{fontSize:"20px",color:"var(--text3)"}}>›</span>
+                </div>
+              </div>
+
+              {/* Card Quiz */}
+              <div onClick={()=>setStep("quiz-setup")} className="tap" style={{background:"linear-gradient(135deg,rgba(69,170,242,0.1),rgba(56,103,214,0.07))",border:"1px solid rgba(69,170,242,0.18)",borderRadius:"18px",padding:"18px",cursor:"pointer"}}>
+                <div style={{display:"flex",gap:"14px",alignItems:"center"}}>
+                  <div style={{width:"52px",height:"52px",borderRadius:"16px",background:"linear-gradient(135deg,#45aaf2,#3867d6)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"26px",flexShrink:0}}>🎯</div>
+                  <div style={{flex:1}}>
+                    <div style={{fontSize:"16px",fontWeight:"700",color:"var(--text)",marginBottom:"3px"}}>Quiz Interattivo</div>
+                    <div style={{fontSize:"12px",color:"var(--text2)",lineHeight:1.45}}>8 domande · Una alla volta · Spiegazione dopo ogni risposta</div>
+                  </div>
+                  <span style={{fontSize:"20px",color:"var(--text3)"}}>›</span>
+                </div>
+              </div>
+
+              {aiText&&flashcards.length>0&&(
+                <div onClick={()=>{setFcIndice(0);setFcFlipped(false);setStep("flashcards");}} className="tap" style={{background:"linear-gradient(135deg,rgba(38,222,129,0.1),rgba(32,191,107,0.07))",border:"1px solid rgba(38,222,129,0.18)",borderRadius:"18px",padding:"18px",marginTop:"10px",cursor:"pointer"}}>
+                  <div style={{display:"flex",gap:"14px",alignItems:"center"}}>
+                    <div style={{width:"52px",height:"52px",borderRadius:"16px",background:"linear-gradient(135deg,#26de81,#20bf6b)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"26px",flexShrink:0}}>🃏</div>
+                    <div style={{flex:1}}>
+                      <div style={{fontSize:"16px",fontWeight:"700",color:"var(--text)",marginBottom:"3px"}}>Flashcard</div>
+                      <div style={{fontSize:"12px",color:"var(--text2)",lineHeight:1.45}}>{flashcards.length} carte da memorizzare · Tocca per girare</div>
+                    </div>
+                    <span style={{fontSize:"20px",color:"var(--text3)"}}>›</span>
+                  </div>
+                </div>
+              )}
+
+              <div style={{background:"var(--bg3)",borderRadius:"12px",padding:"10px 14px",marginTop:"12px",display:"flex",gap:"8px",alignItems:"center"}}>
+                <span>✨</span>
+                <div style={{fontSize:"11px",color:"var(--text2)",lineHeight:1.5}}>Tutto generato da Claude AI specificamente per <strong style={{color:"var(--text)"}}>{arg}</strong>. Prima genera la scheda, poi il quiz.</div>
+              </div>
+            </div>
+          )}
+
+          {/* ─── LOADING SCHEDA ─── */}
+          {step==="loading-scheda"&&(
+            <div style={{padding:"32px 8px"}}>
+              <div style={{textAlign:"center",marginBottom:"26px"}}>
+                <div style={{fontSize:"54px",marginBottom:"14px"}} className="float">🧠</div>
+                <div style={{fontSize:"17px",fontWeight:"700",color:"var(--text)",marginBottom:"6px"}}>Claude studia per te…</div>
+                <div style={{fontSize:"13px",color:"var(--accent)",fontWeight:"600",minHeight:"20px"}} className="pulse">{loadMsg}</div>
+                <div style={{fontSize:"11px",color:"var(--text3)",marginTop:"4px"}}>Ci vogliono 10-20 secondi</div>
+              </div>
+              <div style={{background:"var(--bg4)",borderRadius:"8px",height:"6px",overflow:"hidden",marginBottom:"20px"}}>
+                <div style={{height:"100%",borderRadius:"8px",background:"linear-gradient(90deg,var(--accent),var(--accent2))",animation:"loadbar 2.5s ease-in-out infinite"}}/>
+              </div>
+              {["📌 Definizioni e termini","📐 Regole e formule","📅 Date importanti","💡 Concetti chiave","⚠️ Errori comuni","✅ Checklist","🎯 Trucchi mnemonici"].map((s,i)=>(
+                <div key={i} style={{padding:"9px 14px",borderRadius:"10px",background:"var(--bg3)",marginBottom:"5px",display:"flex",alignItems:"center",gap:"10px",border:"1px solid var(--border2)"}}>
+                  <span style={{fontSize:"14px",flexShrink:0}}>{s.split(" ")[0]}</span>
+                  <span style={{fontSize:"12px",color:"var(--text3)",flex:1}}>{s.split(" ").slice(1).join(" ")}</span>
+                  <div style={{width:"14px",height:"14px",border:"2px solid var(--border)",borderTop:"2px solid var(--accent)",borderRadius:"50%",flexShrink:0,animation:`spin ${0.8+i*0.12}s linear infinite`}}/>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* ─── SCHEDA ─── */}
+          {step==="scheda"&&(
+            <div className="fade-up">
+              {/* Action bar */}
+              <div style={{display:"flex",gap:"7px",padding:"12px 0 10px",flexWrap:"wrap"}}>
+                <button onClick={apriPDF} style={{flex:1,minWidth:"100px",padding:"11px 8px",borderRadius:"12px",border:"none",background:"linear-gradient(135deg,#7c6fff,#ff6b9d)",color:"#fff",fontFamily:"'Sora',sans-serif",fontSize:"13px",fontWeight:"700",cursor:"pointer"}}>📄 Apri PDF</button>
+                <button onClick={()=>setStep("quiz-setup")} style={{flex:1,minWidth:"100px",padding:"11px 8px",borderRadius:"12px",border:"none",background:"linear-gradient(135deg,#45aaf2,#3867d6)",color:"#fff",fontFamily:"'Sora',sans-serif",fontSize:"13px",fontWeight:"700",cursor:"pointer"}}>🎯 Quiz</button>
+                {flashcards.length>0&&<button onClick={()=>{setFcIndice(0);setFcFlipped(false);setStep("flashcards");}} style={{flex:1,minWidth:"100px",padding:"11px 8px",borderRadius:"12px",border:"none",background:"linear-gradient(135deg,#26de81,#20bf6b)",color:"#fff",fontFamily:"'Sora',sans-serif",fontSize:"13px",fontWeight:"700",cursor:"pointer"}}>🃏 Flashcard</button>}
+              </div>
+
+              {/* Checklist interattiva */}
+              {checklist.length>0&&(
+                <div style={{background:"var(--bg3)",borderRadius:"16px",overflow:"hidden",marginBottom:"10px",border:"1px solid var(--border2)"}}>
+                  <div style={{padding:"10px 14px",borderBottom:"1px solid var(--border2)",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                    <span style={{fontSize:"12px",fontWeight:"700",color:"var(--accent)",letterSpacing:"0.05em"}}>✅ CHECKLIST PRE-{tipo.toUpperCase()}</span>
+                    <span style={{fontSize:"11px",color:"var(--text3)",fontFamily:"'JetBrains Mono',monospace"}}>{checklist.filter(c=>c.done).length}/{checklist.length}</span>
+                  </div>
+                  {checklist.map((c,i)=>(
+                    <div key={i} onClick={()=>setChecklist(p=>p.map((x,j)=>j===i?{...x,done:!x.done}:x))}
+                      style={{padding:"10px 14px",display:"flex",alignItems:"flex-start",gap:"10px",borderBottom:i<checklist.length-1?"1px solid var(--border2)":"none",cursor:"pointer",background:c.done?"rgba(38,222,129,0.04)":"transparent"}}>
+                      <div style={{width:"20px",height:"20px",borderRadius:"6px",border:`2px solid ${c.done?"#26de81":"var(--border)"}`,background:c.done?"#26de81":"transparent",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,marginTop:"1px",transition:"all 0.15s"}}>
+                        {c.done&&<span style={{color:"#fff",fontSize:"11px",fontWeight:"700"}}>✓</span>}
+                      </div>
+                      <span style={{fontSize:"13px",color:c.done?"var(--text3)":"var(--text)",textDecoration:c.done?"line-through":"none",lineHeight:1.4,flex:1}}>{c.text}</span>
+                    </div>
+                  ))}
+                  {checklist.every(c=>c.done)&&(
+                    <div style={{padding:"12px",textAlign:"center",background:"rgba(38,222,129,0.08)",borderTop:"1px solid rgba(38,222,129,0.15)"}}>
+                      <span style={{fontSize:"13px",fontWeight:"700",color:"#26de81"}}>🎉 Sei pronto/a per la verifica!</span>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Scheda testo */}
+              <div style={{background:"var(--bg3)",borderRadius:"14px",padding:"14px",marginBottom:"10px",border:"1px solid var(--border2)"}}>
+                <div style={{fontSize:"11px",fontWeight:"700",letterSpacing:"0.06em",color:"var(--text3)",marginBottom:"10px"}}>SCHEDA COMPLETA</div>
+                <div style={{fontSize:"13px",color:"var(--text2)",lineHeight:1.75,maxHeight:"500px",overflowY:"auto"}}
+                  dangerouslySetInnerHTML={{__html:aiText
+                    .replace(/\*\*(.*?)\*\*/g,'<strong style="color:var(--text);font-weight:700">$1</strong>')
+                    .replace(/^## (.*)/gm,'<div style="font-size:14px;font-weight:800;color:var(--accent);margin:16px 0 8px;padding-top:4px;border-top:1px solid var(--border2)">$1</div>')
+                    .replace(/^### (.*)/gm,'<div style="font-size:13px;font-weight:700;color:var(--text);margin:10px 0 4px">$1</div>')
+                    .replace(/^[-•] (.*)/gm,'<div style="padding:2px 0 2px 14px;position:relative"><span style="position:absolute;left:0;color:var(--accent)">•</span>$1</div>')
+                    .replace(/^(\d+)\. (.*)/gm,'<div style="padding:2px 0 2px 18px;position:relative"><span style="position:absolute;left:0;color:var(--accent);font-weight:700;font-size:11px">$1.</span>$2</div>')
+                  }}
+                />
+              </div>
+
+              <button onClick={()=>setStep("menu")} className="btn-ghost" style={{width:"100%",fontSize:"13px"}}>← Torna al menu</button>
+            </div>
+          )}
+
+          {/* ─── FLASHCARD ─── */}
+          {step==="flashcards"&&flashcards.length>0&&(
+            <div className="fade-up" style={{paddingTop:"14px"}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"14px"}}>
+                <span style={{fontSize:"12px",fontWeight:"700",color:"var(--green)"}}>🃏 FLASHCARD</span>
+                <span style={{fontSize:"12px",color:"var(--text3)",fontFamily:"'JetBrains Mono',monospace"}}>{fcIndice+1} / {flashcards.length}</span>
+              </div>
+              <div className="progress-bar" style={{marginBottom:"16px"}}><div className="progress-fill" style={{width:`${((fcIndice+1)/flashcards.length)*100}%`,background:"linear-gradient(90deg,#26de81,#20bf6b)"}}/></div>
+
+              {/* La carta */}
+              <div onClick={()=>setFcFlipped(f=>!f)} style={{background:fcFlipped?"linear-gradient(135deg,rgba(38,222,129,0.12),rgba(32,191,107,0.08))":"var(--bg3)",border:`2px solid ${fcFlipped?"rgba(38,222,129,0.3)":"var(--border)"}`,borderRadius:"20px",padding:"28px 20px",minHeight:"160px",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",textAlign:"center",cursor:"pointer",transition:"all 0.3s",marginBottom:"14px",gap:"10px"}}>
+                <div style={{fontSize:"11px",fontWeight:"800",letterSpacing:"0.08em",color:fcFlipped?"#26de81":"var(--text3)"}}>{fcFlipped?"DEFINIZIONE":"TERMINE"}</div>
+                <div style={{fontSize:fcFlipped?"14px":"22px",fontWeight:fcFlipped?"500":"800",color:"var(--text)",lineHeight:1.4}}>
+                  {fcFlipped?flashcards[fcIndice].back:flashcards[fcIndice].front}
+                </div>
+                {!fcFlipped&&<div style={{fontSize:"11px",color:"var(--text3)",marginTop:"4px"}}>Tocca per vedere la definizione</div>}
+              </div>
+
+              <div style={{display:"flex",gap:"8px"}}>
+                <button onClick={()=>{setFcFlipped(false);setFcIndice(i=>Math.max(0,i-1));}} disabled={fcIndice===0} style={{flex:1,padding:"11px",borderRadius:"12px",border:"1px solid var(--border2)",background:"var(--bg3)",color:fcIndice===0?"var(--text3)":"var(--text)",fontFamily:"'Sora',sans-serif",fontSize:"13px",fontWeight:"600",cursor:fcIndice===0?"default":"pointer"}}>‹ Indietro</button>
+                {fcIndice<flashcards.length-1
+                  ?<button onClick={()=>{setFcFlipped(false);setFcIndice(i=>i+1);}} style={{flex:2,padding:"11px",borderRadius:"12px",border:"none",background:"linear-gradient(135deg,#26de81,#20bf6b)",color:"#fff",fontFamily:"'Sora',sans-serif",fontSize:"13px",fontWeight:"700",cursor:"pointer"}}>Avanti →</button>
+                  :<button onClick={()=>setStep("menu")} style={{flex:2,padding:"11px",borderRadius:"12px",border:"none",background:"linear-gradient(135deg,var(--accent),var(--accent2))",color:"#fff",fontFamily:"'Sora',sans-serif",fontSize:"13px",fontWeight:"700",cursor:"pointer"}}>🎉 Finito!</button>
+                }
+              </div>
+              <button onClick={()=>setStep("scheda")} className="btn-ghost" style={{width:"100%",marginTop:"8px",fontSize:"12px"}}>← Torna alla scheda</button>
+            </div>
+          )}
+
+          {/* ─── QUIZ SETUP ─── */}
+          {step==="quiz-setup"&&(
+            <div className="fade-up" style={{paddingTop:"14px"}}>
+              {err&&<div style={{background:"rgba(255,77,109,0.08)",border:"1px solid rgba(255,77,109,0.2)",borderRadius:"12px",padding:"12px 14px",marginBottom:"12px",fontSize:"13px",color:"var(--red)",lineHeight:1.4}}>{err}</div>}
+              <div style={{fontSize:"14px",fontWeight:"700",color:"var(--text)",marginBottom:"12px"}}>Com'è la tua preparazione su <em style={{fontStyle:"normal",color:"var(--accent)"}}>{arg}</em>?</div>
+              {[{e:"😴",l:"Per niente",s:"Domande molto semplici"},{e:"😟",l:"Poco",s:"Concetti base"},{e:"😐",l:"Abbastanza",s:"Livello medio"},{e:"😊",l:"Bene",s:"Domande difficili"},{e:"🔥",l:"Pronto/a!",s:"Livello esame"}].map((x,i)=>(
+                <div key={i} onClick={()=>setLivello(i+1)} style={{padding:"12px 14px",borderRadius:"14px",border:`2px solid ${livello===i+1?"var(--accent)":"var(--border2)"}`,background:livello===i+1?"rgba(124,111,255,0.08)":"var(--bg3)",cursor:"pointer",marginBottom:"7px",display:"flex",alignItems:"center",gap:"12px",transition:"all 0.15s"}}>
+                  <span style={{fontSize:"22px",flexShrink:0}}>{x.e}</span>
+                  <div style={{flex:1}}>
+                    <div style={{fontSize:"14px",fontWeight:livello===i+1?"700":"500",color:livello===i+1?"var(--accent)":"var(--text)"}}>{x.l}</div>
+                    <div style={{fontSize:"11px",color:"var(--text3)",marginTop:"1px"}}>{x.s}</div>
+                  </div>
+                  {livello===i+1&&<div style={{width:"20px",height:"20px",borderRadius:"50%",background:"var(--accent)",display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{color:"#fff",fontSize:"11px"}}>✓</span></div>}
+                </div>
+              ))}
+              <button onClick={generaQuiz} style={{width:"100%",padding:"14px",borderRadius:"14px",border:"none",background:"linear-gradient(135deg,#45aaf2,#3867d6)",color:"#fff",fontFamily:"'Sora',sans-serif",fontSize:"15px",fontWeight:"700",cursor:"pointer",marginTop:"4px",marginBottom:"8px"}}>
+                ✨ Genera Quiz con Claude
+              </button>
+              <button onClick={()=>setStep("menu")} className="btn-ghost" style={{width:"100%",fontSize:"13px"}}>← Indietro</button>
+            </div>
+          )}
+
+          {/* ─── LOADING QUIZ ─── */}
+          {step==="loading-quiz"&&(
+            <div style={{padding:"32px 8px"}}>
+              <div style={{textAlign:"center",marginBottom:"24px"}}>
+                <div style={{fontSize:"54px",marginBottom:"12px"}} className="float">🎯</div>
+                <div style={{fontSize:"17px",fontWeight:"700",color:"var(--text)",marginBottom:"6px"}}>Claude prepara il quiz…</div>
+                <div style={{fontSize:"13px",color:"var(--blue)",fontWeight:"600",minHeight:"20px"}} className="pulse">{loadMsg}</div>
+                <div style={{fontSize:"11px",color:"var(--text3)",marginTop:"4px"}}>8 domande · 10-15 secondi</div>
+              </div>
+              <div style={{background:"var(--bg4)",borderRadius:"8px",height:"6px",overflow:"hidden",marginBottom:"18px"}}>
+                <div style={{height:"100%",borderRadius:"8px",background:"linear-gradient(90deg,#45aaf2,#3867d6)",animation:"loadbar 2s ease-in-out infinite"}}/>
+              </div>
+              {[1,2,3,4,5,6,7,8].map(n=>(
+                <div key={n} style={{padding:"9px 14px",borderRadius:"10px",background:"var(--bg3)",marginBottom:"5px",display:"flex",alignItems:"center",gap:"10px",border:"1px solid var(--border2)"}}>
+                  <div style={{width:"22px",height:"22px",borderRadius:"50%",background:"rgba(69,170,242,0.12)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"11px",fontWeight:"700",color:"var(--blue)",flexShrink:0}}>{n}</div>
+                  <div style={{flex:1,height:"8px",borderRadius:"4px",background:"var(--bg4)",overflow:"hidden"}}>
+                    <div style={{height:"100%",borderRadius:"4px",background:`linear-gradient(90deg,#45aaf2,#3867d6)`,width:`${20+n*9}%`}}/>
+                  </div>
+                  <div style={{width:"13px",height:"13px",border:"2px solid var(--border)",borderTop:"2px solid #45aaf2",borderRadius:"50%",animation:`spin ${0.7+n*0.1}s linear infinite`,flexShrink:0}}/>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* ─── QUIZ (una domanda alla volta) ─── */}
+          {step==="quiz"&&!tutteRisposte&&dCorr&&(
+            <div className="fade-up">
+              {/* Barra progresso */}
+              <div style={{display:"flex",alignItems:"center",gap:"10px",padding:"12px 0 10px"}}>
+                <div style={{flex:1,height:"5px",borderRadius:"3px",background:"var(--bg4)",overflow:"hidden"}}>
+                  <div style={{height:"100%",borderRadius:"3px",background:"linear-gradient(90deg,#45aaf2,#3867d6)",width:`${((quizIndice+1)/quizDomande.length)*100}%`,transition:"width 0.4s"}}/>
+                </div>
+                <span style={{fontSize:"12px",color:"var(--text3)",fontFamily:"'JetBrains Mono',monospace",flexShrink:0}}>{quizIndice+1}/{quizDomande.length}</span>
+              </div>
+
+              {/* Domanda */}
+              <div style={{background:"var(--bg3)",borderRadius:"18px",padding:"18px",marginBottom:"12px",border:"1px solid var(--border2)"}}>
+                <div style={{fontSize:"10px",fontWeight:"800",letterSpacing:"0.07em",color:"var(--blue)",marginBottom:"8px"}}>DOMANDA {quizIndice+1}</div>
+                <div style={{fontSize:"16px",fontWeight:"600",color:"var(--text)",lineHeight:1.45}}>{dCorr.domanda}</div>
+              </div>
+
+              {/* Risposte */}
+              <div style={{display:"flex",flexDirection:"column",gap:"8px",marginBottom:"12px"}}>
+                {dCorr.risposte.map((r,j)=>{
+                  const isC=r===dCorr.corretta, isS=r===dCorr.scelta;
+                  const answered=dCorr.scelta!==null;
+                  let bg="var(--bg3)", border="var(--border2)", col="var(--text)";
+                  if(answered){
+                    if(isC){bg="rgba(38,222,129,0.12)";border="#26de81";col="#26de81";}
+                    else if(isS){bg="rgba(255,77,109,0.1)";border="#ff4d6d";col="#ff4d6d";}
+                  }
+                  return (
+                    <div key={j} onClick={()=>!answered&&rispondi(r)}
+                      style={{padding:"13px 14px",borderRadius:"14px",border:`2px solid ${border}`,background:bg,cursor:answered?"default":"pointer",display:"flex",alignItems:"center",gap:"12px",transition:"all 0.2s"}}>
+                      <div style={{width:"26px",height:"26px",borderRadius:"50%",background:answered?(isC?"#26de81":isS?"#ff4d6d":"var(--bg4)"):"rgba(69,170,242,0.12)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,fontSize:"12px",fontWeight:"800",color:answered?(isC||isS?"#fff":"var(--text3)"):"var(--blue)",transition:"all 0.2s"}}>
+                        {answered?(isC?"✓":isS?"✗":String.fromCharCode(65+j)):String.fromCharCode(65+j)}
+                      </div>
+                      <span style={{fontSize:"14px",color:col,fontWeight:answered&&(isC||isS)?"600":"400",lineHeight:1.3,flex:1}}>{r}</span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Spiegazione */}
+              {dCorr.scelta!==null&&(
+                <div style={{background:dCorr.scelta===dCorr.corretta?"rgba(38,222,129,0.08)":"rgba(255,107,157,0.08)",border:`1px solid ${dCorr.scelta===dCorr.corretta?"rgba(38,222,129,0.25)":"rgba(255,107,157,0.25)"}`,borderRadius:"14px",padding:"14px",marginBottom:"12px"}}>
+                  <div style={{fontSize:"13px",fontWeight:"800",color:dCorr.scelta===dCorr.corretta?"#26de81":"var(--accent2)",marginBottom:"5px"}}>
+                    {dCorr.scelta===dCorr.corretta?"✅ Corretto!":"❌ Risposta sbagliata"}
+                  </div>
+                  {dCorr.scelta!==dCorr.corretta&&<div style={{fontSize:"12px",color:"var(--text2)",marginBottom:"5px"}}>✅ Risposta corretta: <strong style={{color:"#26de81"}}>{dCorr.corretta}</strong></div>}
+                  {dCorr.spiegazione&&<div style={{fontSize:"13px",color:"var(--text2)",lineHeight:1.5}}>{dCorr.spiegazione}</div>}
+                </div>
+              )}
+
+              {/* Next / Prev */}
+              {dCorr.scelta!==null&&(
+                <div style={{display:"flex",gap:"8px"}}>
+                  {quizIndice>0&&<button onClick={()=>{setQuizIndice(i=>i-1);}} className="btn-ghost" style={{flex:1,fontSize:"13px"}}>‹ Prec.</button>}
+                  {quizIndice<quizDomande.length-1
+                    ?<button onClick={()=>setQuizIndice(i=>i+1)} style={{flex:2,padding:"13px",borderRadius:"12px",border:"none",background:"linear-gradient(135deg,#45aaf2,#3867d6)",color:"#fff",fontFamily:"'Sora',sans-serif",fontSize:"14px",fontWeight:"700",cursor:"pointer"}}>Prossima →</button>
+                    :tutteRisposte
+                      ?<button onClick={()=>setStep("quiz-result")} style={{flex:2,padding:"13px",borderRadius:"12px",border:"none",background:"linear-gradient(135deg,var(--accent),var(--accent2))",color:"#fff",fontFamily:"'Sora',sans-serif",fontSize:"14px",fontWeight:"700",cursor:"pointer"}}>🏆 Vedi risultato</button>
+                      :null
+                  }
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ─── RISULTATO QUIZ ─── */}
+          {(step==="quiz"&&tutteRisposte||step==="quiz-result")&&tutteRisposte&&(
+            <div className="fade-up" style={{paddingTop:"14px"}}>
+              {/* Score card */}
+              <div style={{background:"var(--bg3)",borderRadius:"20px",padding:"24px",textAlign:"center",marginBottom:"14px",border:`2px solid ${punteggio===quizDomande.length?"#26de81":punteggio>=quizDomande.length*0.75?"var(--accent)":punteggio>=quizDomande.length*0.5?"var(--orange)":"var(--red)"}`}}>
+                <div style={{fontSize:"52px",marginBottom:"10px"}}>{punteggio===quizDomande.length?"🏆":punteggio>=quizDomande.length*0.75?"⭐":punteggio>=quizDomande.length*0.5?"💪":"📚"}</div>
+                <div style={{fontSize:"36px",fontWeight:"800",color:"var(--text)",letterSpacing:"-1px",marginBottom:"4px"}}>{punteggio}<span style={{fontSize:"18px",color:"var(--text3)"}}>/{quizDomande.length}</span></div>
+                <div style={{fontSize:"16px",fontWeight:"700",color:punteggio===quizDomande.length?"#26de81":punteggio>=quizDomande.length*0.75?"var(--accent)":punteggio>=quizDomande.length*0.5?"var(--orange)":"var(--red)",marginBottom:"6px"}}>
+                  {punteggio===quizDomande.length?"Perfetto! Sei pronto/a!":punteggio>=quizDomande.length*0.75?"Ottimo! Quasi pronto/a":punteggio>=quizDomande.length*0.5?"Bene, ripassa i punti sbagliati":"Studia ancora, poi riprova!"}
+                </div>
+                <div style={{fontSize:"12px",color:"var(--text3)"}}>Livello: {["Facile","Facile","Medio","Difficile","Expert"][livello-1]}</div>
+              </div>
+
+              {/* Riepilogo errori */}
+              {quizDomande.filter(d=>d.scelta!==d.corretta).length>0&&(
+                <div style={{background:"var(--bg3)",borderRadius:"14px",overflow:"hidden",marginBottom:"12px",border:"1px solid var(--border2)"}}>
+                  <div style={{padding:"10px 14px",borderBottom:"1px solid var(--border2)"}}>
+                    <span style={{fontSize:"12px",fontWeight:"700",color:"var(--red)",letterSpacing:"0.05em"}}>❌ DA RIPASSARE</span>
+                  </div>
+                  {quizDomande.filter(d=>d.scelta!==d.corretta).map((d,i,arr)=>(
+                    <div key={i} style={{padding:"11px 14px",borderBottom:i<arr.length-1?"1px solid var(--border2)":"none"}}>
+                      <div style={{fontSize:"13px",fontWeight:"600",color:"var(--text)",marginBottom:"3px",lineHeight:1.3}}>{d.domanda}</div>
+                      <div style={{fontSize:"12px",color:"#26de81"}}>✅ {d.corretta}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div style={{display:"flex",gap:"8px",marginBottom:"8px"}}>
+                <button onClick={()=>{setQuizDomande(q=>q.map(d=>({...d,scelta:null})));setQuizIndice(0);setStep("quiz");}} className="btn-ghost" style={{flex:1,fontSize:"13px"}}>↺ Riprova</button>
+                <button onClick={()=>{setQuizDomande([]);setStep("quiz-setup");}} style={{flex:1,padding:"12px",borderRadius:"12px",border:"none",background:"linear-gradient(135deg,#45aaf2,#3867d6)",color:"#fff",fontFamily:"'Sora',sans-serif",fontSize:"13px",fontWeight:"700",cursor:"pointer"}}>🎯 Nuovo quiz</button>
+              </div>
+              <button onClick={()=>setStep("menu")} className="btn-ghost" style={{width:"100%",fontSize:"13px"}}>← Menu ripasso</button>
+            </div>
+          )}
+
+        </div>
+      </div>
+    </div>
+  );
+}
+
+  const mat=MATERIE.find(m=>m.id===event.materia)||MATERIE[MATERIE.length-1];
+  const matLabel=event.materia==="altra"?(event.customMateria||"Materia"):mat.label;
+  const arg=event.argomento||matLabel;
+  const tipo=event.tipoVerifica||"Verifica";
+
+  // ── Genera scheda studio ──
+  const generaScheda=async()=>{
+    setStep("loading-scheda");
+    setAiText("");
+    setErr("");
+
+    // Messaggi di progresso animati mentre Claude lavora
+    const msgs=["📚 Analizzo l'argomento…","✍️ Scrivo le definizioni chiave…","📐 Preparo regole e formule…","💡 Organizzo i concetti…","✅ Finisco la checklist…"];
+    let mi=0;
+    setLoadMsg(msgs[0]);
+    const ticker=setInterval(()=>{ mi=(mi+1)%msgs.length; setLoadMsg(msgs[mi]); },2200);
+
+    try{
+      const prompt=`Sei un professore italiano esperto di ${matLabel}. Prepara una scheda di studio COMPLETA per una ${tipo} su: "${arg}".
+
+Usa ESATTAMENTE queste sezioni con ## come titolo:
+
+## 📌 Definizioni Chiave
+Per ogni termine importante scrivi: **Termine**: definizione chiara e semplice. Almeno 5-8 termini.
+
+## 📐 Regole e Formule
+Tutte le regole, formule, leggi da sapere. Sii specifico e preciso. Includi esempi numerici se rilevante.
+
+## 📅 Date e Fatti da Ricordare
+Date storiche, numeri, dati statistici, eventi importanti legati all'argomento.
+
+## 💡 Concetti Fondamentali
+Spiega i 4-6 concetti più importanti in modo chiaro, con esempi concreti tratti dalla vita reale.
+
+## ⚠️ Errori Comuni da Evitare
+I 5 errori tipici degli studenti su questo argomento e come non commetterli.
+
+## ✅ Checklist Pre-${tipo}
+Lista di 8-10 punti: "So spiegare…", "So calcolare…", "Conosco…" — da spuntare prima della verifica.
+
+## 🎯 Trucchi per Ricordare
+Acronimi, mnemotecniche, associazioni mentali, analogie utili per memorizzare.
+
+Scrivi in italiano. Sii dettagliato, pratico, con esempi reali. Minimo 600 parole.`;
+
+      const text = await callClaude(prompt, 2500);
+      clearInterval(ticker);
+      setAiText(text);
+      setStep("scheda");
+    }catch(e){
+      clearInterval(ticker);
+      setErr("Errore: "+e.message+". Controlla la connessione e riprova.");
+      setStep("menu");
+    }
+  };
+
+  // ── Apri PDF ──
+  const apriPDF=()=>{
+    const html=generateStudyPDF(event.materia, arg, tipo, aiText);
+    const blob=new Blob([html],{type:"text/html"});
+    window.open(URL.createObjectURL(blob),"_blank");
+  };
+
+  // ── Genera Quiz ──
+  const generaQuiz=async()=>{
+    setStep("loading-quiz");
+    setErr("");
+
+    const msgs=["🎯 Preparo le domande…","🧠 Scelgo gli argomenti chiave…","✍️ Scrivo le risposte…","🔀 Mescolo le opzioni…"];
+    let mi=0;
+    setLoadMsg(msgs[0]);
+    const ticker=setInterval(()=>{ mi=(mi+1)%msgs.length; setLoadMsg(msgs[mi]); },1800);
+
+    try{
+      const diff=livello<=2?"molto semplici, su concetti base":livello===3?"di media difficoltà, su concetti principali":livello===4?"difficili, con applicazioni e ragionamento":"molto difficili, approfondite e con dettagli tecnici";
+      const prompt=`Sei un professore italiano di ${matLabel}. Crea esattamente 6 domande a risposta multipla ${diff} sull'argomento: "${arg}".
+
+RISPONDI SOLO con un array JSON valido. Zero testo prima o dopo. Zero backtick. Solo JSON puro:
+[{"d":"testo domanda?","r":["opzione A","opzione B","opzione C","opzione D"],"c":"opzione corretta esatta","spieg":"spiegazione breve del perché è corretta"},{"d":"...","r":[...],"c":"...","spieg":"..."},{"d":"...","r":[...],"c":"...","spieg":"..."},{"d":"...","r":[...],"c":"...","spieg":"..."},{"d":"...","r":[...],"c":"...","spieg":"..."},{"d":"...","r":[...],"c":"...","spieg":"..."}]
+
+REGOLE CRITICHE:
+1. "c" deve essere IDENTICA PAROLA PER PAROLA a una delle stringhe in "r"
+2. Le 3 risposte errate devono essere plausibili, non ovviamente false
+3. Varia il tipo: definizioni, calcoli, applicazioni, cause/effetti, confronti
+4. Ogni domanda deve riguardare un aspetto DIVERSO di "${arg}"
+5. "spieg" deve spiegare perché la risposta è corretta in 1-2 frasi`;
+
+      const raw=await callClaude(prompt, 1500);
+      clearInterval(ticker);
+      let clean=raw.replace(/```json|```/g,"").trim();
+      const start=clean.indexOf('[');
+      const end=clean.lastIndexOf(']');
+      if(start>=0&&end>=0) clean=clean.slice(start,end+1);
+      const parsed=JSON.parse(clean);
+      // Valida ogni domanda
+      const valide=parsed.filter(q=>q.d&&q.r&&q.r.length>=2&&q.c&&q.r.includes(q.c));
+      if(valide.length<3) throw new Error("JSON non valido, riprova.");
+      setQuizDomande(valide.map(q=>({
+        domanda:q.d,
+        risposte:[...q.r].sort(()=>Math.random()-0.5),
+        corretta:q.c,
+        spiegazione:q.spieg||"",
+        scelta:null
+      })));
+      setStep("quiz");
+    }catch(e){
+      clearInterval(ticker);
+      setErr("Errore generazione quiz: "+e.message+". Riprova.");
+      setStep("quiz-setup");
+    }
+  };
+
+  const rispondi=(i,r)=>setQuizDomande(prev=>prev.map((d,j)=>j===i?{...d,scelta:r}:d));
+  const punteggio=quizDomande.filter(d=>d.scelta===d.corretta).length;
+  const tutteRisposte=quizDomande.length>0&&quizDomande.every(d=>d.scelta!==null);
+
+  const cat=getCat(event.category);
+
+  return (
+
+
+// ── LISTA SPESA AI ────────────────────────────────────────────────────────────
+function ListaSpesaPanel({event, onClose}){
+  const [piatti,setPiatti]=useState("");
+  const [step,setStep]=useState("input");
+  const [lista,setLista]=useState({lista:[],suggerimenti:[]});
+  const [checked,setChecked]=useState({});
+  const [err,setErr]=useState("");
+  const [loadMsg,setLoadMsg]=useState("");
+  const [vis,setVis]=useState(false);
+  useEffect(()=>{requestAnimationFrame(()=>setVis(true))},[]);
+  const close=()=>{setVis(false);setTimeout(onClose,320)};
+
+  const genera=async()=>{
+    if(!piatti.trim()) return;
+    setStep("loading");
+    setErr("");
+    const msgs=["🍳 Analizzo la ricetta…","📦 Trovo gli ingredienti…","⚖️ Calcolo le quantità…","✅ Aggiungo i consigli…"];
+    let mi=0; setLoadMsg(msgs[0]);
+    const ticker=setInterval(()=>{mi=(mi+1)%msgs.length;setLoadMsg(msgs[mi]);},1800);
+    try{
+      const prompt=`Sei un cuoco italiano esperto. L'utente vuole cucinare: "${piatti}".
+
+Crea la lista della spesa COMPLETA e PRECISA con tutti gli ingredienti reali per 4 persone.
+
+Rispondi SOLO con JSON valido. Zero testo prima o dopo. Zero backtick. Solo JSON:
+{"lista":[{"nome":"nome ingrediente","quantita":"quantità precisa","categoria":"emoji"},...],"suggerimenti":[{"nome":"ingrediente extra","motivo":"perché aggiungerlo"}],"note_cottura":"Un tip di cottura utile in 1 frase"}
+
+Categorie emoji: 🥩=carne/pesce, 🥬=verdure/frutta, 🥛=latticini/uova, 🥫=dispensa/scatolette, 🌾=pasta/cereali/farina, 🧂=spezie/condimenti, 💧=liquidi
+REGOLE: includi TUTTI gli ingredienti reali, quantità precise (es: "320g" non "q.b." per cose misurabili), max 3 suggerimenti.`;
+
+      const raw=await callClaude(prompt, 900);
+      clearInterval(ticker);
+      // Parser robusto per oggetto JSON
+      let clean=raw.replace(/```json\s*/gi,"").replace(/```\s*/g,"").trim();
+      const s=clean.indexOf('{'), e=clean.lastIndexOf('}');
+      if(s>=0&&e>=0) clean=clean.slice(s,e+1);
+      let parsed;
+      try{ parsed=JSON.parse(clean); }
+      catch{
+        // Prova fix trailing commas
+        const fixed=clean.replace(/,\s*}/g,"}").replace(/,\s*]/g,"]");
+        parsed=JSON.parse(fixed);
+      }
+      if(!parsed.lista||!Array.isArray(parsed.lista)) throw new Error("Formato non valido");
+      setLista(parsed);
+      setStep("lista");
+    }catch(e){
+      clearInterval(ticker);
+      setErr("Errore: "+e.message+". Riprova.");
+      setStep("input");
+    }
+  };
+
+  const toggle=n=>setChecked(p=>({...p,[n]:!p[n]}));
+  const nCheck=Object.values(checked).filter(Boolean).length;
+
+  return (
+    <div onClick={e=>e.target===e.currentTarget&&close()} style={{position:"fixed",inset:0,zIndex:600,background:vis?"rgba(0,0,0,0.7)":"rgba(0,0,0,0)",backdropFilter:"blur(12px)",transition:"background 0.3s",display:"flex",flexDirection:"column",justifyContent:"flex-end"}}>
+      <div style={{background:"var(--bg2)",borderRadius:"24px 24px 0 0",maxHeight:"90vh",display:"flex",flexDirection:"column",transform:vis?"translateY(0)":"translateY(100%)",transition:"transform 0.4s cubic-bezier(0.32,0.72,0,1)",paddingBottom:"env(safe-area-inset-bottom,24px)"}}>
+        <div style={{display:"flex",justifyContent:"center",padding:"10px 0 0"}}><div style={{width:"40px",height:"4px",background:"var(--border)",borderRadius:"2px"}}/></div>
+        <div style={{padding:"16px 20px 12px",display:"flex",alignItems:"center",justifyContent:"space-between",flexShrink:0,borderBottom:"1px solid var(--border2)"}}>
+          <div>
+            <div style={{fontSize:"10px",fontWeight:"700",letterSpacing:"0.08em",color:"var(--green)",marginBottom:"4px"}}>🛒 LISTA SPESA AI</div>
+            <div style={{fontSize:"18px",fontWeight:"700",color:"var(--text)"}}>Ingredienti precisi</div>
+          </div>
+          <button onClick={close} style={{background:"var(--bg3)",border:"none",borderRadius:"50%",width:"32px",height:"32px",cursor:"pointer",color:"var(--text2)",fontSize:"16px",display:"flex",alignItems:"center",justifyContent:"center"}}>×</button>
+        </div>
+
+        <div className="scroll" style={{flex:1,padding:"16px"}}>
+          {step==="input"&&(
+            <div className="fade-up">
+              {err&&<div style={{background:"rgba(255,77,109,0.1)",border:"1px solid rgba(255,77,109,0.3)",borderRadius:"12px",padding:"12px",marginBottom:"12px",fontSize:"13px",color:"var(--red)"}}>{err}</div>}
+              <div style={{background:"var(--bg3)",borderRadius:"16px",padding:"16px",marginBottom:"14px"}}>
+                <div style={{fontSize:"14px",fontWeight:"700",color:"var(--text)",marginBottom:"4px"}}>Cosa vuoi cucinare? 🍳</div>
+                <div style={{fontSize:"12px",color:"var(--text2)",marginBottom:"10px"}}>Es: pasta carbonara, tiramisù, risotto ai funghi…</div>
+                <textarea value={piatti} onChange={e=>setPiatti(e.target.value)} placeholder={"pasta carbonara\ntiramisù\npizza margherita"} style={{width:"100%",minHeight:"100px",border:"none",background:"var(--bg4)",borderRadius:"10px",padding:"12px",fontSize:"15px",fontFamily:"'Sora',sans-serif",color:"var(--text)",outline:"none",resize:"none",display:"block"}}/>
+              </div>
+              <button onClick={genera} disabled={!piatti.trim()} style={{width:"100%",padding:"15px",borderRadius:"14px",border:"none",background:piatti.trim()?"linear-gradient(135deg,#26de81,#20bf6b)":"var(--bg3)",color:piatti.trim()?"#fff":"var(--text3)",fontFamily:"'Sora',sans-serif",fontSize:"15px",fontWeight:"700",cursor:piatti.trim()?"pointer":"default"}}>
+                Genera lista 🛒
+              </button>
+            </div>
+          )}
+
+          {step==="loading"&&(
+            <div style={{padding:"32px 16px"}}>
+              <div style={{textAlign:"center",marginBottom:"24px"}}>
+                <div style={{fontSize:"50px",marginBottom:"12px"}} className="float">🛒</div>
+                <div style={{fontSize:"16px",fontWeight:"700",color:"var(--text)",marginBottom:"6px"}}>Claude trova gli ingredienti…</div>
+                <div style={{fontSize:"13px",color:"#26de81",fontWeight:"600"}} className="pulse">{loadMsg}</div>
+              </div>
+              <div style={{background:"var(--bg4)",borderRadius:"6px",height:"5px",overflow:"hidden",marginBottom:"16px"}}>
+                <div style={{height:"100%",borderRadius:"5px",background:"linear-gradient(90deg,#26de81,#20bf6b)",animation:"loadbar 2s ease-in-out infinite"}}/>
+              </div>
+              {["🥩 Carne e pesce","🥬 Verdure e frutta","🥛 Latticini","🌾 Pasta e cereali","🧂 Spezie e condimenti"].map((s,i)=>(
+                <div key={i} style={{padding:"9px 14px",borderRadius:"10px",background:"var(--bg3)",marginBottom:"6px",display:"flex",alignItems:"center",gap:"10px",border:"1px solid var(--border2)"}}>
+                  <span style={{fontSize:"14px"}}>{s.split(" ")[0]}</span>
+                  <span style={{fontSize:"12px",color:"var(--text2)"}}>{s.split(" ").slice(1).join(" ")}</span>
+                  <div style={{marginLeft:"auto",width:"14px",height:"14px",border:"2px solid var(--border)",borderTop:`2px solid #26de81`,borderRadius:"50%",animation:`spin ${0.8+i*0.15}s linear infinite`}}/>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {step==="lista"&&(
+            <div className="fade-up">
+              {lista.note_cottura&&(
+                <div style={{background:"rgba(38,222,129,0.08)",border:"1px solid rgba(38,222,129,0.2)",borderRadius:"12px",padding:"12px 14px",marginBottom:"12px",fontSize:"13px",color:"var(--text2)",lineHeight:1.5}}>
+                  <span style={{fontWeight:"700",color:"#26de81"}}>💡 </span>{lista.note_cottura}
+                </div>
+              )}
+
+              <div style={{background:"var(--bg3)",borderRadius:"16px",overflow:"hidden",marginBottom:"12px"}}>
+                <div style={{padding:"12px 16px",borderBottom:"1px solid var(--border2)",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                  <span style={{fontSize:"11px",fontWeight:"700",color:"var(--text3)",letterSpacing:"0.06em"}}>DA COMPRARE</span>
+                  <span style={{fontSize:"12px",color:"var(--text2)"}}>{nCheck}/{lista.lista?.length||0} ✓</span>
+                </div>
+                {lista.lista?.map((item,i)=>(
+                  <div key={i} onClick={()=>toggle(item.nome)} style={{padding:"12px 16px",display:"flex",alignItems:"center",gap:"12px",borderBottom:i<(lista.lista.length-1)?"1px solid var(--border2)":"none",cursor:"pointer",background:checked[item.nome]?"rgba(38,222,129,0.04)":"transparent"}}>
+                    <div style={{width:"22px",height:"22px",borderRadius:"50%",border:`2px solid ${checked[item.nome]?"#26de81":"var(--border)"}`,background:checked[item.nome]?"#26de81":"transparent",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,transition:"all 0.15s"}}>
+                      {checked[item.nome]&&<span style={{color:"#fff",fontSize:"11px",fontWeight:"700"}}>✓</span>}
+                    </div>
+                    <span style={{fontSize:"22px",flexShrink:0}}>{item.categoria}</span>
+                    <div style={{flex:1}}>
+                      <span style={{fontSize:"15px",fontWeight:"500",color:checked[item.nome]?"var(--text3)":"var(--text)",textDecoration:checked[item.nome]?"line-through":"none"}}>{item.nome}</span>
+                    </div>
+                    <span style={{fontSize:"12px",color:"var(--text3)",fontFamily:"'JetBrains Mono',monospace"}}>{item.quantita}</span>
+                  </div>
+                ))}
+              </div>
+
+              {lista.suggerimenti?.length>0&&(
+                <div style={{marginBottom:"12px"}}>
+                  <div style={{fontSize:"11px",fontWeight:"700",color:"var(--text3)",letterSpacing:"0.06em",marginBottom:"8px"}}>AGGIUNTE CONSIGLIATE</div>
+                  <div style={{background:"var(--bg3)",borderRadius:"14px",overflow:"hidden"}}>
+                    {lista.suggerimenti.map((s,i)=>(
+                      <div key={i} onClick={()=>toggle("sg_"+s.nome)} style={{padding:"11px 16px",display:"flex",alignItems:"center",gap:"12px",borderBottom:i<lista.suggerimenti.length-1?"1px solid var(--border2)":"none",cursor:"pointer"}}>
+                        <div style={{width:"22px",height:"22px",borderRadius:"50%",border:`2px solid ${checked["sg_"+s.nome]?"#26de81":"rgba(38,222,129,0.3)"}`,background:checked["sg_"+s.nome]?"#26de81":"rgba(38,222,129,0.08)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                          {checked["sg_"+s.nome]?<span style={{color:"#fff",fontSize:"11px"}}>✓</span>:<span style={{color:"#26de81",fontSize:"14px"}}>+</span>}
+                        </div>
+                        <div style={{flex:1}}>
+                          <div style={{fontSize:"14px",fontWeight:"500",color:"var(--text)"}}>{s.nome}</div>
+                          <div style={{fontSize:"11px",color:"var(--text2)",marginTop:"1px"}}>{s.motivo}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {nCheck>0&&lista.lista&&nCheck>=lista.lista.length&&(
+                <div style={{background:"rgba(38,222,129,0.1)",border:"1px solid rgba(38,222,129,0.3)",borderRadius:"12px",padding:"14px",textAlign:"center",marginBottom:"12px"}}>
+                  <div style={{fontSize:"28px",marginBottom:"4px"}}>🎉</div>
+                  <div style={{fontSize:"14px",fontWeight:"700",color:"#26de81"}}>Hai preso tutto! Buona spesa!</div>
+                </div>
+              )}
+
+              <div style={{display:"flex",gap:"8px"}}>
+                <button onClick={()=>{setStep("input");setChecked({});setPiatti("");}} className="btn-ghost" style={{flex:1}}>↺ Nuova lista</button>
+                <button onClick={close} style={{flex:1,padding:"13px",borderRadius:"12px",border:"none",background:"linear-gradient(135deg,#26de81,#20bf6b)",color:"#fff",fontFamily:"'Sora',sans-serif",fontSize:"14px",fontWeight:"700",cursor:"pointer"}}>✓ Fatto!</button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── TODO AI PANEL ─────────────────────────────────────────────────────────────
+function TodoAIPanel({event, onClose}){
+  const [step,setStep]=useState("menu");
+  const [aiText,setAiText]=useState("");
+  const [vis,setVis]=useState(false);
+  const [err,setErr]=useState("");
+  useEffect(()=>{requestAnimationFrame(()=>setVis(true))},[]);
+  const close=()=>{setVis(false);setTimeout(onClose,320)};
+
+  const [loadMsg,setLoadMsg]=useState("");
+  const pianifica=async()=>{
+    setStep("loading");
+    setErr("");
+    const msgs=["✨ Analizzo il task…","📋 Creo i passi da seguire…","⏱️ Stimo i tempi…","💡 Aggiungo consigli pratici…"];
+    let mi=0; setLoadMsg(msgs[0]);
+    const ticker=setInterval(()=>{mi=(mi+1)%msgs.length;setLoadMsg(msgs[mi]);},2000);
+    try{
+      const prompt=`Sei un assistente organizzativo esperto. L'utente deve fare: "${event.title}".
+
+Crea un piano di azione DETTAGLIATO e PRATICO con queste sezioni (usa ## per i titoli):
+
+## ✅ Passi da Seguire
+Almeno 6-8 azioni concrete numerate, dal primo step all'ultimo. Sii specifico.
+
+## ⏱️ Stima Tempi
+Per ogni passo scrivi quanto tempo richiede. Poi il tempo totale stimato.
+
+## 💡 Consigli Pratici
+4-5 consigli utili per completare questo task nel modo migliore.
+
+## 🚨 Non Dimenticare
+3-4 cose importanti che si tende a trascurare per questo tipo di task.
+
+## 🎯 Come Sai che Hai Finito
+Criteri concreti per capire quando il task è completato con successo.
+
+Scrivi in italiano. Sii pratico, specifico, adattato esattamente a "${event.title}".`;
+
+      const text=await callClaude(prompt, 1500);
+      clearInterval(ticker);
+      setAiText(text);
+      setStep("result");
+    }catch(e){
+      clearInterval(ticker);
+      setErr("Errore: "+e.message+". Riprova.");
+      setStep("menu");
+    }
+  };
+
+  return (
+    <div onClick={e=>e.target===e.currentTarget&&close()} style={{position:"fixed",inset:0,zIndex:600,background:vis?"rgba(0,0,0,0.7)":"rgba(0,0,0,0)",backdropFilter:"blur(12px)",transition:"background 0.3s",display:"flex",flexDirection:"column",justifyContent:"flex-end"}}>
+      <div style={{background:"var(--bg2)",borderRadius:"24px 24px 0 0",maxHeight:"90vh",display:"flex",flexDirection:"column",transform:vis?"translateY(0)":"translateY(100%)",transition:"transform 0.4s cubic-bezier(0.32,0.72,0,1)",paddingBottom:"env(safe-area-inset-bottom,24px)"}}>
+        <div style={{display:"flex",justifyContent:"center",padding:"10px 0 0"}}><div style={{width:"40px",height:"4px",background:"var(--border)",borderRadius:"2px"}}/></div>
+        <div style={{padding:"16px 20px 12px",display:"flex",alignItems:"center",justifyContent:"space-between",flexShrink:0,borderBottom:"1px solid var(--border2)"}}>
+          <div>
+            <div style={{fontSize:"10px",fontWeight:"700",letterSpacing:"0.08em",color:"var(--purple)",marginBottom:"4px"}}>✅ PIANO AI</div>
+            <div style={{fontSize:"16px",fontWeight:"700",color:"var(--text)",maxWidth:"240px",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{event.title}</div>
+          </div>
+          <button onClick={close} style={{background:"var(--bg3)",border:"none",borderRadius:"50%",width:"32px",height:"32px",cursor:"pointer",color:"var(--text2)",fontSize:"16px",display:"flex",alignItems:"center",justifyContent:"center"}}>×</button>
+        </div>
+
+        <div className="scroll" style={{flex:1,padding:"16px"}}>
+          {step==="menu"&&(
+            <div className="fade-up">
+              {err&&<div style={{background:"rgba(255,77,109,0.1)",border:"1px solid rgba(255,77,109,0.3)",borderRadius:"12px",padding:"12px",marginBottom:"12px",fontSize:"13px",color:"var(--red)"}}>{err}</div>}
+              <div style={{background:"linear-gradient(135deg,rgba(165,94,234,0.12),rgba(124,111,255,0.08))",border:"1px solid rgba(165,94,234,0.2)",borderRadius:"18px",padding:"20px",marginBottom:"14px",textAlign:"center"}}>
+                <div style={{fontSize:"42px",marginBottom:"10px"}} className="float">✨</div>
+                <div style={{fontSize:"17px",fontWeight:"700",color:"var(--text)",marginBottom:"6px"}}>Piano AI per completare il task</div>
+                <div style={{fontSize:"13px",color:"var(--text2)",lineHeight:1.5}}>Claude crea un piano passo-passo con tempi, consigli e checklist per: <strong style={{color:"var(--accent)"}}>"{event.title}"</strong></div>
+              </div>
+              <button onClick={pianifica} className="btn-primary" style={{width:"100%",background:"linear-gradient(135deg,#a55eea,#7c6fff)"}}>
+                ✨ Crea piano con Claude AI
+              </button>
+            </div>
+          )}
+
+          {step==="loading"&&(
+            <div style={{padding:"32px 16px"}}>
+              <div style={{textAlign:"center",marginBottom:"24px"}}>
+                <div style={{fontSize:"50px",marginBottom:"12px"}} className="float">✨</div>
+                <div style={{fontSize:"16px",fontWeight:"700",color:"var(--text)",marginBottom:"6px"}}>Claude pianifica…</div>
+                <div style={{fontSize:"13px",color:"var(--purple)",fontWeight:"600"}} className="pulse">{loadMsg}</div>
+              </div>
+              <div style={{background:"var(--bg4)",borderRadius:"6px",height:"5px",overflow:"hidden",marginBottom:"16px"}}>
+                <div style={{height:"100%",borderRadius:"5px",background:"linear-gradient(90deg,#a55eea,#7c6fff)",animation:"loadbar 2s ease-in-out infinite"}}/>
+              </div>
+              {["✅ Passi da seguire","⏱️ Stima tempi","💡 Consigli pratici","🚨 Non dimenticare"].map((s,i)=>(
+                <div key={i} style={{padding:"9px 14px",borderRadius:"10px",background:"var(--bg3)",marginBottom:"6px",display:"flex",alignItems:"center",gap:"10px",border:"1px solid var(--border2)"}}>
+                  <span style={{fontSize:"14px"}}>{s.split(" ")[0]}</span>
+                  <span style={{fontSize:"12px",color:"var(--text2)"}}>{s.split(" ").slice(1).join(" ")}</span>
+                  <div style={{marginLeft:"auto",width:"14px",height:"14px",border:"2px solid var(--border)",borderTop:`2px solid #a55eea`,borderRadius:"50%",animation:`spin ${0.9+i*0.2}s linear infinite`}}/>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {step==="result"&&(
+            <div className="fade-up">
+              <div style={{background:"var(--bg3)",borderRadius:"14px",padding:"16px",marginBottom:"12px",fontSize:"13px",color:"var(--text2)",lineHeight:1.7,maxHeight:"450px",overflowY:"auto"}}
+                dangerouslySetInnerHTML={{__html:aiText.replace(/\*\*(.*?)\*\*/g,'<strong style="color:var(--text)">$1</strong>').replace(/^## (.*)/gm,'<div style="font-weight:700;color:var(--purple);font-size:14px;margin:14px 0 6px">$1</div>').replace(/^### (.*)/gm,'<div style="font-weight:600;color:var(--text);margin:8px 0 4px;font-size:13px">$1</div>').replace(/^- (.*)/gm,'<div style="padding:3px 0;padding-left:16px;position:relative"><span style="position:absolute;left:0;color:var(--purple)">•</span>$1</div>').replace(/^\d+\. (.*)/gm,'<div style="padding:3px 0;color:var(--text)">$1</div>')}}
+              />
+              <div style={{display:"flex",gap:"8px"}}>
+                <button onClick={()=>{setAiText("");setStep("menu");}} className="btn-ghost" style={{flex:1}}>↺ Rigenera</button>
+                <button onClick={close} style={{flex:1,padding:"13px",borderRadius:"12px",border:"none",background:"linear-gradient(135deg,#a55eea,#7c6fff)",color:"#fff",fontFamily:"'Sora',sans-serif",fontSize:"14px",fontWeight:"700",cursor:"pointer"}}>✓ Salvato!</button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── APPUNTAMENTO AI ───────────────────────────────────────────────────────────
+function AppuntamentoAIPanel({event, onClose}){
+  const [step,setStep]=useState("menu");
+  const [aiText,setAiText]=useState("");
+  const [vis,setVis]=useState(false);
+  const [err,setErr]=useState("");
+  useEffect(()=>{requestAnimationFrame(()=>setVis(true))},[]);
+  const close=()=>{setVis(false);setTimeout(onClose,320)};
+
+  const [loadMsg,setLoadMsg]=useState("");
+  const prepara=async()=>{
+    setStep("loading");
+    setErr("");
+    const msgs=["📋 Analizzo l'appuntamento…","📦 Preparo la lista documenti…","❓ Genero domande utili…","🏠 Aggiungo follow-up…"];
+    let mi=0; setLoadMsg(msgs[0]);
+    const ticker=setInterval(()=>{mi=(mi+1)%msgs.length;setLoadMsg(msgs[mi]);},2000);
+    try{
+      const prompt=`Sei un assistente esperto. L'utente ha un appuntamento: "${event.title}".
+
+Crea una guida PRATICA di preparazione (usa ## per i titoli):
+
+## 📋 Cosa Portare
+Lista completa di documenti e oggetti da portare. Sii specifico per questo tipo di appuntamento.
+
+## 🕐 Prima dell'Appuntamento
+Cosa fare nei giorni e nelle ore precedenti per arrivare preparato.
+
+## ❓ Domande da Fare
+6-8 domande concrete e importanti da porre durante l'appuntamento.
+
+## 📝 Note da Prendere
+Cosa annotare durante l'appuntamento per non dimenticare nulla.
+
+## 🏠 Dopo l'Appuntamento
+Step successivi, follow-up consigliato, cosa fare con le informazioni ricevute.
+
+Scrivi in italiano. Adatta ogni sezione esattamente a "${event.title}".`;
+
+      const text=await callClaude(prompt, 1500);
+      clearInterval(ticker);
+      setAiText(text);
+      setStep("result");
+    }catch(e){
+      clearInterval(ticker);
+      setErr("Errore: "+e.message+". Riprova.");
+      setStep("menu");
+    }
+  };
+    }catch(e){
+      setErr("Errore: "+e.message+". Riprova.");
+      setStep("menu");
+    }
+  };
+
+  return (
+    <div onClick={e=>e.target===e.currentTarget&&close()} style={{position:"fixed",inset:0,zIndex:600,background:vis?"rgba(0,0,0,0.7)":"rgba(0,0,0,0)",backdropFilter:"blur(12px)",transition:"background 0.3s",display:"flex",flexDirection:"column",justifyContent:"flex-end"}}>
+      <div style={{background:"var(--bg2)",borderRadius:"24px 24px 0 0",maxHeight:"90vh",display:"flex",flexDirection:"column",transform:vis?"translateY(0)":"translateY(100%)",transition:"transform 0.4s cubic-bezier(0.32,0.72,0,1)",paddingBottom:"env(safe-area-inset-bottom,24px)"}}>
+        <div style={{display:"flex",justifyContent:"center",padding:"10px 0 0"}}><div style={{width:"40px",height:"4px",background:"var(--border)",borderRadius:"2px"}}/></div>
+        <div style={{padding:"16px 20px 12px",display:"flex",alignItems:"center",justifyContent:"space-between",flexShrink:0,borderBottom:"1px solid var(--border2)"}}>
+          <div>
+            <div style={{fontSize:"10px",fontWeight:"700",letterSpacing:"0.08em",color:"var(--blue)",marginBottom:"4px"}}>🏥 PREPARA APPUNTAMENTO</div>
+            <div style={{fontSize:"16px",fontWeight:"700",color:"var(--text)",maxWidth:"240px",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{event.title}</div>
+          </div>
+          <button onClick={close} style={{background:"var(--bg3)",border:"none",borderRadius:"50%",width:"32px",height:"32px",cursor:"pointer",color:"var(--text2)",fontSize:"16px",display:"flex",alignItems:"center",justifyContent:"center"}}>×</button>
+        </div>
+
+        <div className="scroll" style={{flex:1,padding:"16px"}}>
+          {step==="menu"&&(
+            <div className="fade-up">
+              {err&&<div style={{background:"rgba(255,77,109,0.1)",border:"1px solid rgba(255,77,109,0.3)",borderRadius:"12px",padding:"12px",marginBottom:"12px",fontSize:"13px",color:"var(--red)"}}>{err}</div>}
+              <div style={{background:"linear-gradient(135deg,rgba(69,170,242,0.12),rgba(56,103,214,0.08))",border:"1px solid rgba(69,170,242,0.2)",borderRadius:"18px",padding:"20px",marginBottom:"14px",textAlign:"center"}}>
+                <div style={{fontSize:"42px",marginBottom:"10px"}} className="float">📋</div>
+                <div style={{fontSize:"17px",fontWeight:"700",color:"var(--text)",marginBottom:"6px"}}>Preparati al meglio</div>
+                <div style={{fontSize:"13px",color:"var(--text2)",lineHeight:1.5}}>Claude crea una guida personalizzata con cosa portare, domande da fare e step successivi per il tuo appuntamento</div>
+              </div>
+              <button onClick={prepara} className="btn-primary" style={{width:"100%",background:"linear-gradient(135deg,#45aaf2,#3867d6)"}}>
+                📋 Prepara con Claude AI
+              </button>
+            </div>
+          )}
+
+          {step==="loading"&&(
+            <div style={{padding:"32px 16px"}}>
+              <div style={{textAlign:"center",marginBottom:"24px"}}>
+                <div style={{fontSize:"50px",marginBottom:"12px"}} className="float">📋</div>
+                <div style={{fontSize:"16px",fontWeight:"700",color:"var(--text)",marginBottom:"6px"}}>Claude prepara la guida…</div>
+                <div style={{fontSize:"13px",color:"var(--blue)",fontWeight:"600"}} className="pulse">{loadMsg}</div>
+              </div>
+              <div style={{background:"var(--bg4)",borderRadius:"6px",height:"5px",overflow:"hidden",marginBottom:"16px"}}>
+                <div style={{height:"100%",borderRadius:"5px",background:"linear-gradient(90deg,#45aaf2,#3867d6)",animation:"loadbar 2s ease-in-out infinite"}}/>
+              </div>
+              {["📋 Cosa portare","🕐 Prima dell'appuntamento","❓ Domande da fare","🏠 Follow-up"].map((s,i)=>(
+                <div key={i} style={{padding:"9px 14px",borderRadius:"10px",background:"var(--bg3)",marginBottom:"6px",display:"flex",alignItems:"center",gap:"10px",border:"1px solid var(--border2)"}}>
+                  <span style={{fontSize:"14px"}}>{s.split(" ")[0]}</span>
+                  <span style={{fontSize:"12px",color:"var(--text2)"}}>{s.split(" ").slice(1).join(" ")}</span>
+                  <div style={{marginLeft:"auto",width:"14px",height:"14px",border:"2px solid var(--border)",borderTop:`2px solid #45aaf2`,borderRadius:"50%",animation:`spin ${0.9+i*0.2}s linear infinite`}}/>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {step==="result"&&(
+            <div className="fade-up">
+              <div style={{background:"var(--bg3)",borderRadius:"14px",padding:"16px",marginBottom:"12px",fontSize:"13px",color:"var(--text2)",lineHeight:1.7,maxHeight:"450px",overflowY:"auto"}}
+                dangerouslySetInnerHTML={{__html:aiText.replace(/\*\*(.*?)\*\*/g,'<strong style="color:var(--text)">$1</strong>').replace(/^## (.*)/gm,'<div style="font-weight:700;color:#45aaf2;font-size:14px;margin:14px 0 6px">$1</div>').replace(/^### (.*)/gm,'<div style="font-weight:600;color:var(--text);margin:8px 0 4px">$1</div>').replace(/^- (.*)/gm,'<div style="padding:3px 0;padding-left:16px;position:relative"><span style="position:absolute;left:0;color:#45aaf2">•</span>$1</div>')}}
+              />
+              <div style={{display:"flex",gap:"8px"}}>
+                <button onClick={()=>{setAiText("");setStep("menu");}} className="btn-ghost" style={{flex:1}}>↺ Rigenera</button>
+                <button onClick={close} style={{flex:1,padding:"13px",borderRadius:"12px",border:"none",background:"linear-gradient(135deg,#45aaf2,#3867d6)",color:"#fff",fontFamily:"'Sora',sans-serif",fontSize:"14px",fontWeight:"700",cursor:"pointer"}}>✓ Capito!</button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── MODAL EVENTO ──────────────────────────────────────────────────────────────
+function Modal({dayKey,onClose,onSave,editEvent}){
+  const {dark}=React.useContext(ThemeCtx);
+  const [step,setStep]=useState(editEvent?"details":"category");
+  const [cat,setCat]=useState(editEvent?.category||null);
+  const [materia,setMat]=useState(editEvent?.materia||null);
+  const [cMat,setCMat]=useState(editEvent?.customMateria||"");
+  const [arg,setArg]=useState(editEvent?.argomento||"");
+  const [tipo,setTipo]=useState(editEvent?.tipoVerifica||"");
+  const [name,setName]=useState(editEvent?.personName||"");
+  const [age,setAge]=useState(editEvent?.personAge||"");
+  const [sugg,setSugg]=useState(editEvent?.selectedSugg||null);
+  const [ctitle,setCtitle]=useState(editEvent?.customTitle||"");
+  const [time,setTime]=useState(editEvent?.time||"");
+  const [note,setNote]=useState(editEvent?.note||"");
+  const [vis,setVis]=useState(false);
+  useEffect(()=>{requestAnimationFrame(()=>setVis(true))},[]);
+  const close=()=>{setVis(false);setTimeout(onClose,320)};
+  const C=CATS.find(c=>c.id===cat);
+  const [,km,kd]=dayKey.split("-");
+
+  const SUGG_MAP={
+    commissione:[{label:"Fare la spesa",emoji:"🛒"},{label:"Farmacia",emoji:"💊"},{label:"Pagare bollette",emoji:"💰"},{label:"Posta",emoji:"📮"},{label:"Ritirare pacco",emoji:"📦"},{label:"Banca / ATM",emoji:"🏦"},{label:"Meccanico",emoji:"🔧"},{label:"Shopping",emoji:"🛍️"},{label:"Veterinario",emoji:"🐾"},{label:"Altro",emoji:"✏️"}],
+    appuntamento:[{label:"Medico di base",emoji:"👨‍⚕️"},{label:"Dentista",emoji:"🦷"},{label:"Specialista",emoji:"🏥"},{label:"Fisioterapia",emoji:"💆"},{label:"Analisi sangue",emoji:"🩸"},{label:"Oculista",emoji:"👁️"},{label:"Colloquio scuola",emoji:"🏫"},{label:"Colloquio lavoro",emoji:"👔"},{label:"Parrucchiere",emoji:"✂️"},{label:"Altro",emoji:"✏️"}],
+    todo:[{label:"Studiare",emoji:"📚"},{label:"Fare sport",emoji:"🏃"},{label:"Chiamare qualcuno",emoji:"📞"},{label:"Pulire casa",emoji:"🧹"},{label:"Cucinare",emoji:"🍳"},{label:"Leggere",emoji:"📖"},{label:"Organizzare",emoji:"🗂️"},{label:"Progetto",emoji:"💡"},{label:"Altro",emoji:"✏️"}],
+  };
+
+  const buildTitle=()=>{
+    if(cat==="verifica"){const m=MATERIE.find(x=>x.id===materia);const ml=materia==="altra"?cMat:m?.label;return arg?`${m?.emoji||"📚"} ${tipo||"Verifica"} ${ml} — ${arg}`:`${m?.emoji||"📚"} ${tipo||"Verifica"} di ${ml}`;}
+    if(cat==="compleanno")return `🎂 Compleanno di ${name}${age?` (${age} anni)`:""}`;
+    return sugg==="Altro"?ctitle:(sugg||"");
+  };
+
+  const ok=()=>{
+    if(step==="argomento")return materia!=="altra"||cMat.trim();
+    if(step==="compleanno")return name.trim();
+    if(step==="suggerimenti")return sugg&&(sugg!=="Altro"||ctitle.trim());
+    return true;
+  };
+
+  const save=()=>{const t=buildTitle();if(!t.trim())return;onSave({id:editEvent?.id||Date.now(),category:cat,title:t,time,note,materia,customMateria:cMat,argomento:arg,tipoVerifica:tipo,personName:name,personAge:age,selectedSugg:sugg,customTitle:ctitle});close();};
+  const steps=cat==="verifica"?["category","materia","argomento","details"]:cat==="compleanno"?["category","compleanno","details"]:["category","suggerimenti","details"];
+  const si=steps.indexOf(step);
+
+  return (
+    <div onClick={e=>e.target===e.currentTarget&&close()} style={{position:"fixed",inset:0,zIndex:400,background:vis?"rgba(0,0,0,0.6)":"rgba(0,0,0,0)",backdropFilter:"blur(12px)",transition:"all 0.3s",display:"flex",flexDirection:"column",justifyContent:"flex-end"}}>
+      <div style={{background:"var(--bg2)",borderRadius:"24px 24px 0 0",maxHeight:"92vh",overflowY:"auto",paddingBottom:"env(safe-area-inset-bottom,20px)",transform:vis?"translateY(0)":"translateY(100%)",transition:"transform 0.4s cubic-bezier(0.32,0.72,0,1)"}}>
+        <div style={{display:"flex",justifyContent:"center",padding:"10px 0 0"}}><div style={{width:"40px",height:"4px",background:"var(--border)",borderRadius:"2px"}}/></div>
+        <div style={{padding:"16px 20px 12px",display:"flex",alignItems:"center",justifyContent:"space-between",borderBottom:"1px solid var(--border2)"}}>
+          <div>
+            <div style={{fontSize:"11px",color:"var(--text3)",marginBottom:"4px",fontWeight:"600",letterSpacing:"0.04em"}}>{parseInt(kd)} {MONTHS[parseInt(km)-1]}</div>
+            <div style={{fontSize:"20px",fontWeight:"700",color:"var(--text)"}}>{C?`${C.emoji} ${C.label}`:"Nuovo evento"}</div>
+          </div>
+          <button onClick={close} style={{background:"var(--bg3)",border:"none",borderRadius:"50%",width:"32px",height:"32px",cursor:"pointer",color:"var(--text2)",fontSize:"16px",display:"flex",alignItems:"center",justifyContent:"center"}}>×</button>
+        </div>
+
+        {cat&&(
+          <div style={{display:"flex",gap:"3px",padding:"10px 20px"}}>
+            {steps.map((s,i)=><div key={s} style={{height:"3px",flex:1,borderRadius:"2px",background:i<=si?C?.color||"var(--accent)":"var(--bg4)",transition:"background 0.3s"}}/>)}
+          </div>
+        )}
+
+        <div style={{padding:"8px 16px 20px"}}>
+
+          {step==="category"&&(
+            <div className="fade-up">
+              {CATS.map(c=>(
+                <div key={c.id} className="tap" onClick={()=>{setCat(c.id);c.id==="verifica"?setStep("materia"):c.id==="compleanno"?setStep("compleanno"):setStep("suggerimenti")}}
+                  style={{background:"var(--bg3)",border:"1px solid var(--border2)",borderRadius:"16px",padding:"16px",marginBottom:"8px",display:"flex",alignItems:"center",gap:"14px",cursor:"pointer",transition:"all 0.15s"}}>
+                  <div style={{width:"48px",height:"48px",borderRadius:"14px",background:c.grad,display:"flex",alignItems:"center",justifyContent:"center",fontSize:"24px",flexShrink:0}}>{c.emoji}</div>
+                  <div style={{flex:1}}>
+                    <div style={{fontWeight:"700",fontSize:"16px",color:"var(--text)",marginBottom:"2px"}}>{c.label}</div>
+                    <div style={{fontSize:"12px",color:"var(--text2)"}}>
+                      {c.id==="verifica"&&"📚 Scheda studio + Quiz AI"}{c.id==="compleanno"&&"🎉 Promemoria compleanno"}
+                      {c.id==="commissione"&&"🛒 Lista spesa AI"}{c.id==="appuntamento"&&"📋 Guida preparazione AI"}
+                      {c.id==="todo"&&"✅ Piano azione AI"}
+                    </div>
+                  </div>
+                  <div style={{fontSize:"20px",color:"var(--text3)"}}>›</div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {step==="materia"&&(
+            <div className="fade-up">
+              <button onClick={()=>setStep("category")} style={{background:"none",border:"none",cursor:"pointer",fontFamily:"'Sora',sans-serif",fontSize:"14px",color:"var(--accent)",padding:"0 0 14px",display:"block",fontWeight:"600"}}>‹ Indietro</button>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:"8px"}}>
+                {MATERIE.map(m=>(
+                  <div key={m.id} className="tap" onClick={()=>{setMat(m.id);setStep("argomento")}}
+                    style={{background:materia===m.id?"var(--accent)":"var(--bg3)",borderRadius:"14px",padding:"14px 8px",cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",gap:"5px",border:`1px solid ${materia===m.id?"var(--accent)":"var(--border2)"}`,transition:"all 0.15s"}}>
+                    <span style={{fontSize:"24px"}}>{m.emoji}</span>
+                    <span style={{fontSize:"11px",textAlign:"center",color:materia===m.id?"#fff":"var(--text)",fontWeight:"600",lineHeight:1.2}}>{m.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {step==="argomento"&&(
+            <div className="fade-up">
+              <button onClick={()=>setStep("materia")} style={{background:"none",border:"none",cursor:"pointer",fontFamily:"'Sora',sans-serif",fontSize:"14px",color:"var(--accent)",padding:"0 0 14px",display:"block",fontWeight:"600"}}>‹ Indietro</button>
+              {materia==="altra"&&(
+                <div style={{background:"var(--bg3)",borderRadius:"14px",padding:"12px 16px",marginBottom:"10px",border:"1px solid var(--border2)"}}>
+                  <label style={{fontSize:"11px",fontWeight:"700",color:"var(--text3)",textTransform:"uppercase",letterSpacing:"0.05em",display:"block",marginBottom:"6px"}}>Materia</label>
+                  <input value={cMat} onChange={e=>setCMat(e.target.value)} placeholder="Es. Diritto, Economia…" className="inp" style={{background:"transparent",border:"none",padding:"0"}} autoFocus/>
+                </div>
+              )}
+              <div style={{background:"var(--bg3)",borderRadius:"14px",padding:"14px 16px",marginBottom:"10px",border:"1px solid var(--border2)"}}>
+                <label style={{fontSize:"11px",fontWeight:"700",color:"var(--text3)",textTransform:"uppercase",letterSpacing:"0.05em",display:"block",marginBottom:"8px"}}>Tipo di verifica</label>
+                <div style={{display:"flex",gap:"6px",flexWrap:"wrap"}}>
+                  {TIPI.map(t=>(
+                    <button key={t} onClick={()=>setTipo(tipo===t?"":t)}
+                      style={{padding:"7px 14px",borderRadius:"20px",fontFamily:"'Sora',sans-serif",border:"none",background:tipo===t?C?.color||"var(--accent)":"var(--bg4)",color:tipo===t?"#fff":"var(--text2)",fontSize:"13px",fontWeight:"600",cursor:"pointer",transition:"all 0.15s"}}>
+                      {t}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div style={{background:"var(--bg3)",borderRadius:"14px",padding:"12px 16px",marginBottom:"12px",border:"1px solid var(--border2)"}}>
+                <label style={{fontSize:"11px",fontWeight:"700",color:"var(--text3)",textTransform:"uppercase",letterSpacing:"0.05em",display:"block",marginBottom:"6px"}}>Argomento <span style={{fontWeight:"400",opacity:0.5}}>(opzionale)</span></label>
+                <input value={arg} onChange={e=>setArg(e.target.value)} placeholder="Es. Equazioni, Risorgimento, DNA…" className="inp" style={{background:"transparent",border:"none",padding:"0"}}/>
+              </div>
+              <button onClick={()=>ok()&&setStep("details")} style={{width:"100%",padding:"15px",borderRadius:"14px",border:"none",background:ok()?C?.grad||"var(--accent)":"var(--bg3)",color:ok()?"#fff":"var(--text3)",fontFamily:"'Sora',sans-serif",fontSize:"15px",fontWeight:"700",cursor:ok()?"pointer":"default",transition:"all 0.2s"}}>Continua →</button>
+            </div>
+          )}
+
+          {step==="compleanno"&&(
+            <div className="fade-up">
+              <button onClick={()=>setStep("category")} style={{background:"none",border:"none",cursor:"pointer",fontFamily:"'Sora',sans-serif",fontSize:"14px",color:"var(--accent)",padding:"0 0 14px",display:"block",fontWeight:"600"}}>‹ Indietro</button>
+              <div style={{textAlign:"center",fontSize:"56px",margin:"8px 0 16px"}} className="float">🎂</div>
+              <div style={{background:"var(--bg3)",borderRadius:"14px",padding:"12px 16px",marginBottom:"10px"}}>
+                <label style={{fontSize:"11px",fontWeight:"700",color:"var(--text3)",textTransform:"uppercase",letterSpacing:"0.05em",display:"block",marginBottom:"6px"}}>Nome</label>
+                <input value={name} onChange={e=>setName(e.target.value)} placeholder="Es. Marco, Giulia…" className="inp" style={{background:"transparent",border:"none",padding:"0"}} autoFocus/>
+              </div>
+              <div style={{background:"var(--bg3)",borderRadius:"14px",padding:"12px 16px",marginBottom:"14px"}}>
+                <label style={{fontSize:"11px",fontWeight:"700",color:"var(--text3)",textTransform:"uppercase",letterSpacing:"0.05em",display:"block",marginBottom:"6px"}}>Quanti anni?</label>
+                <input value={age} onChange={e=>setAge(e.target.value)} placeholder="Es. 18" className="inp" style={{background:"transparent",border:"none",padding:"0"}} type="number"/>
+              </div>
+              <button onClick={()=>name.trim()&&setStep("details")} style={{width:"100%",padding:"15px",borderRadius:"14px",border:"none",background:name.trim()?"#ff9f43":"var(--bg3)",color:name.trim()?"#fff":"var(--text3)",fontFamily:"'Sora',sans-serif",fontSize:"15px",fontWeight:"700",cursor:name.trim()?"pointer":"default"}}>Continua →</button>
+            </div>
+          )}
+
+          {step==="suggerimenti"&&(
+            <div className="fade-up">
+              <button onClick={()=>setStep("category")} style={{background:"none",border:"none",cursor:"pointer",fontFamily:"'Sora',sans-serif",fontSize:"14px",color:"var(--accent)",padding:"0 0 12px",display:"block",fontWeight:"600"}}>‹ Indietro</button>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"8px",marginBottom:"10px"}}>
+                {SUGG_MAP[cat]?.map(s=>(
+                  <div key={s.label} className="tap" onClick={()=>setSugg(s.label)}
+                    style={{background:sugg===s.label?C?.grad||"var(--accent)":"var(--bg3)",borderRadius:"14px",padding:"14px",cursor:"pointer",display:"flex",alignItems:"center",gap:"10px",border:`1px solid ${sugg===s.label?"transparent":"var(--border2)"}`,transition:"all 0.15s"}}>
+                    <span style={{fontSize:"22px"}}>{s.emoji}</span>
+                    <span style={{fontSize:"13px",fontWeight:"600",color:sugg===s.label?"#fff":"var(--text)",lineHeight:1.2}}>{s.label}</span>
+                  </div>
+                ))}
+              </div>
+              {sugg==="Altro"&&(
+                <div style={{background:"var(--bg3)",borderRadius:"14px",padding:"12px 16px",marginBottom:"10px"}}>
+                  <input value={ctitle} onChange={e=>setCtitle(e.target.value)} placeholder="Scrivi cosa devi fare…" className="inp" style={{background:"transparent",border:"none",padding:"0"}} autoFocus/>
+                </div>
+              )}
+              <button onClick={()=>ok()&&setStep("details")} style={{width:"100%",padding:"15px",borderRadius:"14px",border:"none",background:ok()?C?.grad||"var(--accent)":"var(--bg3)",color:ok()?"#fff":"var(--text3)",fontFamily:"'Sora',sans-serif",fontSize:"15px",fontWeight:"700",cursor:ok()?"pointer":"default"}}>Continua →</button>
+            </div>
+          )}
+
+          {step==="details"&&(
+            <div className="fade-up">
+              <button onClick={()=>cat==="verifica"?setStep("argomento"):cat==="compleanno"?setStep("compleanno"):setStep("suggerimenti")} style={{background:"none",border:"none",cursor:"pointer",fontFamily:"'Sora',sans-serif",fontSize:"14px",color:"var(--accent)",padding:"0 0 12px",display:"block",fontWeight:"600"}}>‹ Indietro</button>
+              <div style={{background:"var(--bg3)",borderRadius:"14px",padding:"14px 16px",marginBottom:"10px",borderLeft:`4px solid ${C?.color||"var(--accent)"}`}}>
+                <div style={{fontSize:"11px",color:"var(--text3)",fontWeight:"700",marginBottom:"4px",textTransform:"uppercase",letterSpacing:"0.04em"}}>{C?.label}</div>
+                <div style={{fontWeight:"700",fontSize:"15px",color:"var(--text)",lineHeight:1.3}}>{buildTitle()}</div>
+              </div>
+              <div style={{background:"var(--bg3)",borderRadius:"14px",padding:"12px 16px",marginBottom:"8px"}}>
+                <label style={{fontSize:"11px",fontWeight:"700",color:"var(--text3)",textTransform:"uppercase",letterSpacing:"0.05em",display:"block",marginBottom:"6px"}}>Orario</label>
+                <input type="time" value={time} onChange={e=>setTime(e.target.value)} className="inp" style={{background:"transparent",border:"none",padding:"0",colorScheme:"dark"}}/>
+              </div>
+              <div style={{background:"var(--bg3)",borderRadius:"14px",padding:"12px 16px",marginBottom:"14px"}}>
+                <label style={{fontSize:"11px",fontWeight:"700",color:"var(--text3)",textTransform:"uppercase",letterSpacing:"0.05em",display:"block",marginBottom:"6px"}}>Note</label>
+                <textarea value={note} onChange={e=>setNote(e.target.value)} placeholder="Aggiungi dettagli…" className="inp" style={{background:"transparent",border:"none",padding:"0",height:"60px",resize:"none",paddingTop:"2px"}}/>
+              </div>
+              <button onClick={save} style={{width:"100%",padding:"15px",borderRadius:"14px",border:"none",background:C?.grad||"linear-gradient(135deg,var(--accent),var(--accent2))",color:"#fff",fontFamily:"'Sora',sans-serif",fontSize:"16px",fontWeight:"700",cursor:"pointer"}}>
+                ✓ Salva evento
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── DAY SHEET ─────────────────────────────────────────────────────────────────
+function DaySheet({dayKey,events,onAdd,onEdit,onDel,onClose}){
+  const {dark}=React.useContext(ThemeCtx);
+  const [vis,setVis]=useState(false);
+  const [aiPanel,setAiPanel]=useState(null); // {ev, type}
+  const [,km,kd]=dayKey.split("-");
+  const isT=dayKey===todayStr;
+  useEffect(()=>{requestAnimationFrame(()=>setVis(true))},[]);
+  const close=()=>{setVis(false);setTimeout(onClose,320)};
+
+  return (
+    <>
+    <div onClick={e=>e.target===e.currentTarget&&close()} style={{position:"fixed",inset:0,zIndex:300,background:vis?"rgba(0,0,0,0.4)":"rgba(0,0,0,0)",transition:"background 0.3s",display:"flex",flexDirection:"column",justifyContent:"flex-end"}}>
+      <div style={{background:"var(--bg2)",borderRadius:"24px 24px 0 0",maxHeight:"78vh",display:"flex",flexDirection:"column",transform:vis?"translateY(0)":"translateY(100%)",transition:"transform 0.4s cubic-bezier(0.32,0.72,0,1)",paddingBottom:"env(safe-area-inset-bottom,16px)"}}>
+        <div style={{display:"flex",justifyContent:"center",padding:"10px 0 0"}}><div style={{width:"40px",height:"4px",background:"var(--border)",borderRadius:"2px"}}/></div>
+        <div style={{padding:"14px 20px 12px",display:"flex",alignItems:"center",justifyContent:"space-between",borderBottom:"1px solid var(--border2)",flexShrink:0}}>
+          <div>
+            <div style={{fontSize:"22px",fontWeight:"800",color:"var(--text)",display:"flex",alignItems:"center",gap:"8px",letterSpacing:"-0.5px"}}>
+              {parseInt(kd)} {MONTHS[parseInt(km)-1]}
+              {isT&&<span style={{fontSize:"11px",background:"var(--red)",color:"#fff",padding:"3px 10px",borderRadius:"10px",fontWeight:"700"}}>oggi</span>}
+            </div>
+            <div style={{fontSize:"13px",color:"var(--text2)",marginTop:"2px"}}>{events.length} {events.length===1?"evento":"eventi"}</div>
+          </div>
+          <button onClick={onAdd} style={{background:"linear-gradient(135deg,var(--accent),var(--accent2))",color:"#fff",border:"none",borderRadius:"20px",padding:"9px 20px",fontSize:"14px",fontWeight:"700",cursor:"pointer",fontFamily:"'Sora',sans-serif"}}>+ Aggiungi</button>
+        </div>
+
+        <div className="scroll" style={{flex:1,padding:"12px 16px"}}>
+          {events.length===0?(
+            <div style={{textAlign:"center",padding:"40px 0"}}>
+              <div style={{fontSize:"42px",marginBottom:"10px"}} className="float">📋</div>
+              <div style={{color:"var(--text2)",fontSize:"16px",fontWeight:"600"}}>Nessun evento</div>
+              <div style={{color:"var(--text3)",fontSize:"13px",marginTop:"4px"}}>Tocca + Aggiungi per iniziare</div>
+            </div>
+          ):(
+            <div style={{background:"var(--bg3)",borderRadius:"16px",overflow:"hidden"}}>
+              {events.map((ev,i)=>{
+                const c=getCat(ev.category),d=daysBetween(dayKey);
+                const showAiBtn=ev.category==="verifica"||ev.category==="commissione"||ev.category==="todo"||ev.category==="appuntamento";
+                return (
+                  <div key={ev.id}>
+                    <div style={{padding:"13px 14px",display:"flex",alignItems:"center",gap:"12px",borderBottom:`1px solid var(--border2)`}}>
+                      <div style={{width:"36px",height:"36px",borderRadius:"10px",background:c.grad,display:"flex",alignItems:"center",justifyContent:"center",fontSize:"18px",flexShrink:0}}>{c.emoji}</div>
+                      <div style={{flex:1,minWidth:0}}>
+                        <div style={{fontWeight:"600",fontSize:"15px",color:"var(--text)",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{ev.title}</div>
+                        <div style={{fontSize:"11px",color:"var(--text2)",marginTop:"2px",display:"flex",alignItems:"center",gap:"6px"}}>
+                          <span>{c.label}{ev.time?` · ${ev.time}`:""}</span>
+                          {ev.category==="verifica"&&d>0&&<span style={{background:"var(--red)",color:"#fff",borderRadius:"5px",padding:"1px 5px",fontSize:"10px",fontWeight:"700"}}>-{d}g</span>}
+                        </div>
+                      </div>
+                      <button onClick={()=>onEdit(ev)} style={{background:"none",border:"none",cursor:"pointer",color:"var(--text3)",fontSize:"16px",padding:"4px"}}>✏️</button>
+                      <button onClick={()=>onDel(ev.id)} style={{background:"none",border:"none",cursor:"pointer",color:"var(--text3)",fontSize:"22px",padding:"4px"}}>×</button>
+                    </div>
+                    {/* AI Buttons */}
+                    {showAiBtn&&(
+                      <div style={{padding:"8px 14px 10px",display:"flex",gap:"7px",flexWrap:"wrap",borderBottom:i<events.length-1?"1px solid var(--border2)":"none",background:"var(--bg4)"}}>
+                        {ev.category==="verifica"&&(
+                          <button onClick={()=>setAiPanel({ev,type:"ripasso"})} style={{padding:"6px 12px",borderRadius:"12px",border:"none",background:"rgba(124,111,255,0.15)",color:"var(--accent)",fontSize:"12px",fontWeight:"700",cursor:"pointer",fontFamily:"'Sora',sans-serif",display:"flex",alignItems:"center",gap:"4px"}}>
+                            🧠 Ripasso AI
+                          </button>
+                        )}
+                        {(ev.category==="commissione"&&(ev.selectedSugg==="Fare la spesa"||ev.title?.toLowerCase().includes("spesa")))&&(
+                          <button onClick={()=>setAiPanel({ev,type:"spesa"})} style={{padding:"6px 12px",borderRadius:"12px",border:"none",background:"rgba(38,222,129,0.15)",color:"var(--green)",fontSize:"12px",fontWeight:"700",cursor:"pointer",fontFamily:"'Sora',sans-serif",display:"flex",alignItems:"center",gap:"4px"}}>
+                            🛒 Lista spesa AI
+                          </button>
+                        )}
+                        {ev.category==="todo"&&(
+                          <button onClick={()=>setAiPanel({ev,type:"todo"})} style={{padding:"6px 12px",borderRadius:"12px",border:"none",background:"rgba(165,94,234,0.15)",color:"var(--purple)",fontSize:"12px",fontWeight:"700",cursor:"pointer",fontFamily:"'Sora',sans-serif",display:"flex",alignItems:"center",gap:"4px"}}>
+                            ✨ Piano AI
+                          </button>
+                        )}
+                        {ev.category==="appuntamento"&&(
+                          <button onClick={()=>setAiPanel({ev,type:"appuntamento"})} style={{padding:"6px 12px",borderRadius:"12px",border:"none",background:"rgba(69,170,242,0.15)",color:"var(--blue)",fontSize:"12px",fontWeight:"700",cursor:"pointer",fontFamily:"'Sora',sans-serif",display:"flex",alignItems:"center",gap:"4px"}}>
+                            📋 Prepara AI
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+
+    {aiPanel?.type==="ripasso"&&<RipassoPanel event={aiPanel.ev} onClose={()=>setAiPanel(null)}/>}
+    {aiPanel?.type==="spesa"&&<ListaSpesaPanel event={aiPanel.ev} onClose={()=>setAiPanel(null)}/>}
+    {aiPanel?.type==="todo"&&<TodoAIPanel event={aiPanel.ev} onClose={()=>setAiPanel(null)}/>}
+    {aiPanel?.type==="appuntamento"&&<AppuntamentoAIPanel event={aiPanel.ev} onClose={()=>setAiPanel(null)}/>}
+    </>
+  );
+}
+
+// ── ALERTS PANEL ──────────────────────────────────────────────────────────────
+function AlertsPanel({alerts,onClose,onGo}){
+  const [vis,setVis]=useState(false);
+  useEffect(()=>{requestAnimationFrame(()=>setVis(true))},[]);
+  const close=()=>{setVis(false);setTimeout(onClose,320)};
+  const US={urgent:{color:"#ff4d6d",label:"URGENTE"},high:{color:"#ff9f43",label:"IMPORTANTE"},medium:{color:"#ffd32a",label:"ATTENZIONE"},low:{color:"var(--accent)",label:"PROMEMORIA"}};
+
+  return (
+    <div onClick={e=>e.target===e.currentTarget&&close()} style={{position:"fixed",inset:0,zIndex:500,background:vis?"rgba(0,0,0,0.6)":"rgba(0,0,0,0)",transition:"background 0.3s",display:"flex",flexDirection:"column",justifyContent:"flex-end"}}>
+      <div style={{background:"var(--bg2)",borderRadius:"24px 24px 0 0",maxHeight:"88vh",display:"flex",flexDirection:"column",transform:vis?"translateY(0)":"translateY(100%)",transition:"transform 0.4s cubic-bezier(0.32,0.72,0,1)",paddingBottom:"env(safe-area-inset-bottom,24px)"}}>
+        <div style={{display:"flex",justifyContent:"center",padding:"10px 0 0"}}><div style={{width:"40px",height:"4px",background:"var(--border)",borderRadius:"2px"}}/></div>
+        <div style={{padding:"18px 20px 14px",display:"flex",alignItems:"center",justifyContent:"space-between",borderBottom:"1px solid var(--border2)"}}>
+          <div>
+            <div style={{fontSize:"10px",fontWeight:"700",letterSpacing:"0.08em",color:"var(--red)",marginBottom:"4px"}}>🔔 PROMEMORIA</div>
+            <div style={{fontSize:"22px",fontWeight:"800",color:"var(--text)"}}>{alerts.length} avvisi</div>
+          </div>
+          <button onClick={close} style={{background:"var(--bg3)",border:"none",borderRadius:"50%",width:"32px",height:"32px",cursor:"pointer",color:"var(--text2)",fontSize:"16px",display:"flex",alignItems:"center",justifyContent:"center"}}>×</button>
+        </div>
+        <div className="scroll" style={{flex:1,padding:"12px 16px",display:"flex",flexDirection:"column",gap:"8px"}}>
+          {alerts.map((a,i)=>{
+            const s=US[a.u],[,am,ad]=a.day.split("-");
+            const dl=a.d===0?"Oggi":a.d===1?"Domani":`${parseInt(ad)} ${MONTHS_S[parseInt(am)-1]}`;
+            return (
+              <div key={i} className="tap" onClick={()=>{onGo(a.day);close();}} style={{background:"var(--bg3)",border:`1px solid ${s.color}22`,borderRadius:"16px",padding:"14px 16px",cursor:"pointer",display:"flex",alignItems:"center",gap:"14px"}}>
+                <div style={{width:"42px",height:"42px",borderRadius:"12px",background:`${s.color}18`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:"22px",flexShrink:0}}>{a.icon}</div>
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{display:"flex",gap:"6px",alignItems:"center",marginBottom:"3px"}}>
+                    <span style={{fontSize:"10px",fontWeight:"800",color:s.color,letterSpacing:"0.06em"}}>{s.label}</span>
+                    <span style={{fontSize:"11px",color:"var(--text3)"}}>· {dl}</span>
+                  </div>
+                  <div style={{fontWeight:"700",fontSize:"14px",color:"var(--text)",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{a.e.title}</div>
+                  <div style={{fontSize:"12px",color:"var(--text2)",marginTop:"2px"}}>{a.msg}</div>
+                </div>
+                <span style={{color:"var(--text3)",fontSize:"18px"}}>›</span>
+              </div>
+            );
+          })}
+        </div>
+        <div style={{padding:"0 16px 4px"}}>
+          <button onClick={close} className="btn-primary" style={{width:"100%"}}>OK, capito!</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── MAIN APP ──────────────────────────────────────────────────────────────────
+function App(){
+  const [pref,setPref]=useState(loadPref);
+  const [year,setYear]=useState(today.getFullYear());
+  const [month,setMonth]=useState(today.getMonth());
+  const [events,setEvents]=useState(loadEv);
+  const [selDay,setSelDay]=useState(null);
+  const [showModal,setShowModal]=useState(false);
+  const [editEv,setEditEv]=useState(null);
+  const [view,setView]=useState("month");
+  const [fCat,setFCat]=useState(null);
+  const [showAl,setShowAl]=useState(false);
+  const meteo=useMeteo();
+  const dark=pref.dark;
+
+  const toggleDark=()=>{const np={...pref,dark:!dark};setPref(np);savePref(np);};
+  useEffect(()=>{document.body.className=dark?"":"light";},[dark]);
+  useEffect(()=>{saveEv(events)},[events]);
+  useEffect(()=>{const a=getAlerts(events);if(a.length>0)setTimeout(()=>setShowAl(true),800);},[]);
+
+  const alerts=getAlerts(events);
+  const getDay=k=>events[k]||[];
+  const handleSave=ev=>{setEvents(p=>{const d=p[selDay]||[];if(editEv)return{...p,[selDay]:d.map(e=>e.id===ev.id?ev:e)};return{...p,[selDay]:[...d,ev]};});};
+  const delEv=(k,id)=>setEvents(p=>({...p,[k]:(p[k]||[]).filter(e=>e.id!==id)}));
+
+  const totM=useMemo(()=>Object.entries(events).filter(([k])=>k.startsWith(`${year}-${String(month+1).padStart(2,'0')}`)).flatMap(([,e])=>e).length,[events,year,month]);
+  const allEv=useMemo(()=>Object.entries(events).flatMap(([day,evs])=>evs.map(e=>({...e,day}))).filter(e=>e.day.startsWith(String(year))).filter(e=>!fCat||e.category===fCat).sort((a,b)=>a.day.localeCompare(b.day)),[events,year,fCat]);
+  const upcoming=useMemo(()=>Object.entries(events).flatMap(([day,evs])=>evs.map(e=>({...e,day}))).filter(e=>e.day>=todayStr).sort((a,b)=>a.day.localeCompare(b.day)).slice(0,6),[events]);
+  const wDays=useMemo(()=>Array.from({length:7},(_,i)=>{const d=new Date(),dow=d.getDay()===0?6:d.getDay()-1,dd=new Date(d);dd.setDate(d.getDate()-dow+i);return dd;}),[]);
+
+  return (
+    <ThemeCtx.Provider value={{dark,toggle:toggleDark}}>
+    <div style={{fontFamily:"'Sora',sans-serif",background:"var(--bg)",height:"100vh",maxWidth:"430px",margin:"0 auto",display:"flex",flexDirection:"column",overflow:"hidden"}}>
+
+      {/* HEADER */}
+      <div style={{background:dark?"rgba(8,8,15,0.95)":"rgba(247,247,255,0.95)",backdropFilter:"blur(24px)",WebkitBackdropFilter:"blur(24px)",paddingTop:"env(safe-area-inset-top,44px)",flexShrink:0,borderBottom:"1px solid var(--border2)"}}>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 16px 8px"}}>
+          <div style={{display:"flex",alignItems:"center",gap:"8px"}}>
+            <button className="tap" onClick={()=>{const n=addMonths(year,month,-1);setYear(n.year);setMonth(n.month);}} style={{background:"none",border:"none",cursor:"pointer",fontSize:"22px",color:"var(--accent)",padding:"3px 6px",lineHeight:1,fontWeight:"300"}}>‹</button>
+            {meteo&&<div style={{display:"flex",alignItems:"center",gap:"4px",padding:"4px 10px",background:"var(--bg3)",borderRadius:"20px"}}>
+              <span style={{fontSize:"14px"}}>{meteo.icon}</span>
+              <span style={{fontSize:"12px",fontWeight:"700",color:"var(--text2)",fontFamily:"'JetBrains Mono',monospace"}}>{meteo.temp}°</span>
+            </div>}
+          </div>
+
+          <button onClick={()=>{setYear(today.getFullYear());setMonth(today.getMonth());}} style={{background:"none",border:"none",cursor:"pointer",textAlign:"center",padding:"2px 12px"}}>
+            <div style={{fontSize:"18px",fontWeight:"800",color:"var(--text)",letterSpacing:"-0.5px",lineHeight:1}}>{MONTHS[month]}</div>
+            <div style={{fontSize:"12px",color:"var(--text3)",fontWeight:"600",fontFamily:"'JetBrains Mono',monospace"}}>{year} · {totM} eventi</div>
+          </button>
+
+          <div style={{display:"flex",alignItems:"center",gap:"4px"}}>
+            <button className="tap" onClick={toggleDark} style={{background:"var(--bg3)",border:"none",borderRadius:"50%",width:"32px",height:"32px",cursor:"pointer",fontSize:"15px",display:"flex",alignItems:"center",justifyContent:"center"}}>{dark?"☀️":"🌙"}</button>
+            <button className="tap" onClick={()=>setShowAl(true)} style={{background:"var(--bg3)",border:`1px solid ${alerts.length>0?"var(--red)22":"transparent"}`,borderRadius:"50%",width:"32px",height:"32px",cursor:"pointer",position:"relative",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"15px"}}>
+              🔔
+              {alerts.length>0&&<div className="badge">{alerts.length}</div>}
+            </button>
+            <button className="tap" onClick={()=>{const n=addMonths(year,month,1);setYear(n.year);setMonth(n.month);}} style={{background:"none",border:"none",cursor:"pointer",fontSize:"22px",color:"var(--accent)",padding:"3px 6px",lineHeight:1,fontWeight:"300"}}>›</button>
+          </div>
+        </div>
+
+        {/* View tabs */}
+        <div style={{display:"flex",padding:"0 16px",gap:"4px"}}>
+          {[["month","📅 Calendario"],["list","📋 Lista"]].map(([v,l])=>(
+            <button key={v} onClick={()=>setView(v)} style={{flex:1,padding:"7px 0 9px",border:"none",background:"transparent",fontFamily:"'Sora',sans-serif",fontSize:"13px",fontWeight:view===v?"700":"400",color:view===v?"var(--accent)":"var(--text3)",cursor:"pointer",borderBottom:view===v?"2px solid var(--accent)":"2px solid transparent",transition:"all 0.2s"}}>{l}</button>
+          ))}
+        </div>
+      </div>
+
+      {/* CONTENT */}
+      <div className="scroll" style={{flex:1,paddingBottom:"90px"}}>
+        {view==="month"&&(
+          <div>
+            <div style={{padding:"10px 8px 6px"}}>
+              <SwipeCalendar year={year} month={month} events={events} alerts={alerts} onDay={setSelDay} onMonthChange={(y,m)=>{setYear(y);setMonth(m);}}/>
+            </div>
+
+            {/* Category legend */}
+            <div style={{display:"flex",gap:"12px",padding:"6px 16px",overflowX:"auto",flexWrap:"nowrap"}}>
+              {CATS.map(c=><div key={c.id} style={{display:"flex",alignItems:"center",gap:"5px",flexShrink:0}}>
+                <div style={{width:"6px",height:"6px",borderRadius:"50%",background:c.color}}/>
+                <span style={{fontSize:"11px",color:"var(--text3)",fontWeight:"500",whiteSpace:"nowrap"}}>{c.label}</span>
+              </div>)}
+            </div>
+
+            {/* Upcoming events */}
+            {upcoming.length>0&&(
+              <div style={{padding:"8px 12px 0"}}>
+                <div style={{fontSize:"11px",fontWeight:"700",color:"var(--text3)",letterSpacing:"0.07em",marginBottom:"8px",paddingLeft:"4px"}}>PROSSIMI EVENTI</div>
+                <div style={{background:"var(--bg2)",borderRadius:"18px",overflow:"hidden",border:"1px solid var(--border2)"}}>
+                  {upcoming.map((ev,i)=>{
+                    const c=getCat(ev.category),d=daysBetween(ev.day),[,em,ed]=ev.day.split("-");
+                    return (
+                      <div key={`${ev.day}-${ev.id}`} className="tap" onClick={()=>setSelDay(ev.day)}
+                        style={{padding:"12px 14px",display:"flex",alignItems:"center",gap:"12px",cursor:"pointer",borderBottom:i<upcoming.length-1?"1px solid var(--border2)":"none"}}>
+                        <div style={{width:"36px",height:"36px",borderRadius:"10px",background:c.grad,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                          <div style={{fontSize:"13px",fontWeight:"800",color:"#fff",lineHeight:1}}>{parseInt(ed)}</div>
+                          <div style={{fontSize:"8px",color:"rgba(255,255,255,0.8)",fontWeight:"600"}}>{MONTHS_S[parseInt(em)-1]}</div>
+                        </div>
+                        <div style={{flex:1,minWidth:0}}>
+                          <div style={{fontWeight:"600",fontSize:"14px",color:"var(--text)",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{ev.title}</div>
+                          <div style={{fontSize:"11px",color:"var(--text2)",marginTop:"2px",display:"flex",alignItems:"center",gap:"6px"}}>
+                            {d===0?<span style={{color:c.color,fontWeight:"700"}}>Oggi!</span>:d===1?<span style={{color:"var(--orange)",fontWeight:"700"}}>Domani</span>:<span>{c.label}</span>}
+                            {ev.time&&<span>· {ev.time}</span>}
+                            {ev.category==="verifica"&&d>0&&d<=7&&<span style={{background:"var(--red)",color:"#fff",borderRadius:"5px",padding:"1px 5px",fontSize:"10px",fontWeight:"700"}}>-{d}g</span>}
+                          </div>
+                        </div>
+                        <span style={{color:"var(--text3)",fontSize:"16px"}}>›</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {upcoming.length===0&&(
+              <div style={{textAlign:"center",padding:"32px 0"}}>
+                <div style={{fontSize:"40px",marginBottom:"8px"}} className="float">✨</div>
+                <div style={{fontSize:"14px",color:"var(--text3)",fontWeight:"500"}}>Nessun evento in programma</div>
+                <div style={{fontSize:"12px",color:"var(--text3)",marginTop:"4px",opacity:0.6}}>Tocca un giorno per aggiungerne</div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {view==="list"&&(
+          <div style={{padding:"12px"}}>
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:"14px"}}>
+              <button className="tap" onClick={()=>setYear(y=>y-1)} style={{background:"var(--bg3)",border:"none",borderRadius:"10px",padding:"8px 14px",fontSize:"14px",color:"var(--accent)",cursor:"pointer",fontWeight:"700",fontFamily:"'Sora',sans-serif"}}>‹ {year-1}</button>
+              <span style={{fontSize:"18px",fontWeight:"800",color:"var(--text)",fontFamily:"'JetBrains Mono',monospace"}}>{year}</span>
+              <button className="tap" onClick={()=>setYear(y=>y+1)} style={{background:"var(--bg3)",border:"none",borderRadius:"10px",padding:"8px 14px",fontSize:"14px",color:"var(--accent)",cursor:"pointer",fontWeight:"700",fontFamily:"'Sora',sans-serif"}}>{year+1} ›</button>
+            </div>
+
+            <div style={{display:"flex",gap:"6px",overflowX:"auto",paddingBottom:"6px",marginBottom:"14px"}}>
+              <button onClick={()=>setFCat(null)} style={{padding:"6px 14px",borderRadius:"20px",border:`1px solid ${!fCat?"var(--accent)":"var(--border2)"}`,flexShrink:0,background:!fCat?"rgba(124,111,255,0.15)":"var(--bg3)",color:!fCat?"var(--accent)":"var(--text2)",fontSize:"12px",fontWeight:"700",cursor:"pointer",fontFamily:"'Sora',sans-serif"}}>Tutti</button>
+              {CATS.map(c=><button key={c.id} onClick={()=>setFCat(fCat===c.id?null:c.id)} style={{padding:"6px 12px",borderRadius:"20px",border:`1px solid ${fCat===c.id?c.color:c.color+"30"}`,flexShrink:0,background:fCat===c.id?`${c.color}20`:"transparent",color:c.color,fontSize:"12px",fontWeight:"700",cursor:"pointer",fontFamily:"'Sora',sans-serif"}}>{c.emoji} {c.label}</button>)}
+            </div>
+
+            {allEv.length===0?(
+              <div style={{textAlign:"center",padding:"50px 0"}}>
+                <div style={{fontSize:"42px",marginBottom:"10px"}} className="float">📋</div>
+                <div style={{color:"var(--text2)",fontSize:"15px",fontWeight:"600"}}>Nessun evento</div>
+              </div>
+            ):(
+              <div style={{background:"var(--bg2)",borderRadius:"18px",overflow:"hidden",border:"1px solid var(--border2)"}}>
+                {allEv.map((ev,i)=>{
+                  const c=getCat(ev.category),[,em,ed]=ev.day.split("-"),d=daysBetween(ev.day);
+                  return (
+                    <div key={`${ev.day}-${ev.id}`} style={{padding:"12px 14px",display:"flex",alignItems:"center",gap:"12px",borderBottom:i<allEv.length-1?"1px solid var(--border2)":"none"}}>
+                      <div style={{width:"36px",height:"36px",borderRadius:"10px",background:c.grad,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                        <div style={{fontSize:"13px",fontWeight:"800",color:"#fff",lineHeight:1}}>{parseInt(ed)}</div>
+                        <div style={{fontSize:"8px",color:"rgba(255,255,255,0.8)",fontWeight:"600"}}>{MONTHS_S[parseInt(em)-1]}</div>
+                      </div>
+                      <div style={{flex:1,minWidth:0}}>
+                        <div style={{fontWeight:"600",fontSize:"14px",color:"var(--text)",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{ev.title}</div>
+                        <div style={{fontSize:"11px",color:"var(--text2)",marginTop:"2px",display:"flex",alignItems:"center",gap:"5px"}}>
+                          <span style={{color:c.color,fontWeight:"600"}}>{c.label}</span>
+                          {ev.time&&<span>· {ev.time}</span>}
+                          {ev.category==="verifica"&&d>0&&d<=7&&<span style={{background:"var(--red)",color:"#fff",borderRadius:"5px",padding:"1px 5px",fontSize:"10px",fontWeight:"700"}}>-{d}g</span>}
+                        </div>
+                      </div>
+                      <button onClick={()=>delEv(ev.day,ev.id)} style={{background:"none",border:"none",cursor:"pointer",color:"var(--text3)",fontSize:"22px",padding:"4px"}}>×</button>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* BOTTOM WEEK BAR */}
+      <div style={{position:"fixed",bottom:0,left:"50%",transform:"translateX(-50%)",width:"100%",maxWidth:"430px",background:dark?"rgba(8,8,15,0.97)":"rgba(247,247,255,0.97)",backdropFilter:"blur(24px)",WebkitBackdropFilter:"blur(24px)",borderTop:"1px solid var(--border2)",padding:"8px 10px env(safe-area-inset-bottom,18px)",zIndex:150}}>
+        <div style={{display:"flex",justifyContent:"space-between"}}>
+          {wDays.map((d,i)=>{
+            const key=fmt(d.getFullYear(),d.getMonth(),d.getDate()),evs=getDay(key),isT=key===todayStr,hasAl=alerts.some(a=>a.day===key);
+            return (
+              <div key={i} className="tap" onClick={()=>setSelDay(key)} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",padding:"3px 1px",cursor:"pointer",position:"relative"}}>
+                {hasAl&&!isT&&<div style={{position:"absolute",top:"0",right:"4px",width:"5px",height:"5px",borderRadius:"50%",background:"var(--red)"}}/>}
+                <div style={{fontSize:"10px",fontWeight:"700",color:isT?"var(--accent)":"var(--text3)",marginBottom:"4px",letterSpacing:"0.04em"}}>{DAYS[i]}</div>
+                <div style={{width:"32px",height:"32px",borderRadius:"10px",background:isT?"linear-gradient(135deg,var(--accent),var(--accent2))":"transparent",display:"flex",alignItems:"center",justifyContent:"center",transition:"background 0.15s"}}>
+                  <div style={{fontSize:"15px",fontWeight:isT?"800":"500",color:isT?"#fff":i>=5?"var(--orange)":"var(--text)"}}>{d.getDate()}</div>
+                </div>
+                <div style={{display:"flex",gap:"2px",marginTop:"3px",height:"4px",alignItems:"center"}}>
+                  {evs.slice(0,3).map((ev,j)=><div key={j} style={{width:"4px",height:"4px",borderRadius:"50%",background:isT?"rgba(255,255,255,0.7)":getCat(ev.category).color}}/>)}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {showAl&&<AlertsPanel alerts={alerts} onClose={()=>setShowAl(false)} onGo={day=>{setSelDay(day);setMonth(parseInt(day.split("-")[1])-1);setYear(parseInt(day.split("-")[0]));setView("month");}}/>}
+      {selDay&&!showModal&&!showAl&&<DaySheet dayKey={selDay} events={getDay(selDay)} onAdd={()=>{setEditEv(null);setShowModal(true)}} onEdit={ev=>{setEditEv(ev);setShowModal(true)}} onDel={id=>delEv(selDay,id)} onClose={()=>setSelDay(null)}/>}
+      {showModal&&selDay&&<Modal dayKey={selDay} onClose={()=>setShowModal(false)} onSave={handleSave} editEvent={editEv}/>}
+    </div>
+    </ThemeCtx.Provider>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
